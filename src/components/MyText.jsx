@@ -1,6 +1,8 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
-import { Field, Form, Formik, ErrorMessage } from 'formik';
+import {
+  Field, Form, Formik, ErrorMessage,
+} from 'formik';
 import * as yup from 'yup';
 
 const initialValues = {

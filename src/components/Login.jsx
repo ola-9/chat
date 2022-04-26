@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card, Button } from 'react-bootstrap';
 import {
-  Formik, Form, Field, ErrorMessage
+  Formik, Form, Field, ErrorMessage,
 } from 'formik';
 import * as yup from 'yup';
 
