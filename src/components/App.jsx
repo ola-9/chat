@@ -1,31 +1,70 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Navbar, Container } from 'react-bootstrap';
 import {
   BrowserRouter as Router,
   Routes,
   Route,
+  useLocation,
+  Navigate,
 } from 'react-router-dom';
 import Login from './Login.jsx';
 import NotFound from './NotFound.jsx';
-import MyTest from './MyText.jsx';
+import MyTest from './MyTest.jsx';
+import AuthContext from '../contexts/index.jsx';
+import useAuth from '../hooks/index.jsx';
+import Chat from './Chat.jsx';
+
+const AuthProvider = ({ children }) => {
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  const logIn = () => setLoggedIn(true);
+  const logOut = () => {
+    localStorage.removeItem('userId');
+    setLoggedIn(false);
+  };
+
+  return (
+    <AuthContext.Provider value={{ loggedIn, logIn, logOut }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+const PrivateRoute = ({ children }) => {
+  const auth = useAuth();
+  const location = useLocation();
+
+  return (
+    auth.loggedIn ? children : <Navigate to="/login" state={{ from: location }} />
+  );
+};
 
 function App() {
   return (
-    <Router>
-      <Navbar variant="light" bg="white" expand="lg" className="shadow-sm">
-        <Container>
-          <Navbar.Brand href="/">Hexlet Chat</Navbar.Brand>
+    <AuthProvider>
+      <Router>
+        <Navbar variant="light" bg="white" expand="lg" className="shadow-sm">
+          <Container>
+            <Navbar.Brand href="/">Hexlet Chat</Navbar.Brand>
+          </Container>
+        </Navbar>
+        <Container fluid className="h-100">
+          <Routes>
+            <Route
+              path="/"
+              element={(
+                <PrivateRoute>
+                  <Chat />
+                </PrivateRoute>
+              )}
+            />
+            <Route path="/login" element={<Login />} />
+            <Route path="/test" element={<MyTest />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
         </Container>
-      </Navbar>
-      <Container fluid className="h-100">
-        <Routes>
-          <Route path="/" element={null} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/test" element={<MyTest />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Container>
-    </Router>
+      </Router>
+    </AuthProvider>
   );
 }
 

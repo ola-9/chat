@@ -19,7 +19,7 @@ const onSubmit = (values) => {
   console.log('form data: ', values);
 };
 
-function MyText() {
+function MyTest() {
   return (
     <Formik
       initialValues={initialValues}
@@ -55,4 +55,4 @@ function MyText() {
   );
 }
 
-export default MyText;
+export default MyTest;
