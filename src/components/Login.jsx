@@ -1,9 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';
-import { Card, Button } from 'react-bootstrap';
-import {
-  Formik, Form, Field, ErrorMessage,
-} from 'formik';
+import { Card, Button, Form } from 'react-bootstrap';
+import { Formik, Field, ErrorMessage } from 'formik';
 import * as yup from 'yup';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -16,17 +14,12 @@ const initialValues = {
 };
 
 const validationSchema = yup.object({
-  username: yup.string().required().min(4),
-  password: yup.string().required().min(4),
+  username: yup.string().required('необходимо ввести логин'),
+  password: yup.string().required('необходимо ввести пароль'),
 });
-
-// const onSubmit = (values) => {
-//   console.log('form data: ', values);
-// };
 
 const Login = (props) => {
   const auth = useAuth();
-  // eslint-disable-next-line no-unused-vars
   const [authFailed, setAuthFailed] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -39,11 +32,12 @@ const Login = (props) => {
     try {
       const res = await axios.post(routes.loginPath(), values);
       console.log(res.data);
+      localStorage.setItem('userId', JSON.stringify(res.data));
       auth.logIn();
       const { from } = location.state || state || { from: { pathname: '/' } };
       navigate(from);
     } catch (err) {
-      console.log("you've got error: ", err);
+      // console.log("you've got error: ", err);
       if (err.isAxiosError && err.response.status === 401) {
         setAuthFailed(true);
         console.log('неверный логин или пароль');
@@ -65,32 +59,47 @@ const Login = (props) => {
               validationSchema={validationSchema}
               onSubmit={onSubmit}
             >
-              <Form>
-                <div className="form-floating mb-3">
-                  <Field
-                    id="username"
-                    type="text"
-                    name="username"
-                    className="form-control"
-                    placeholder="Ваш ник"
-                    autoFocus
-                  />
-                  <label htmlFor="username">Ваш ник</label>
-                  <ErrorMessage name="username" />
-                </div>
-                <div className="form-floating mb-3">
-                  <Field
-                    id="password"
-                    type="password"
-                    name="password"
-                    className="form-control"
-                    placeholder="Пароль"
-                  />
-                  <label htmlFor="password">Пароль</label>
-                  <ErrorMessage name="password" />
-                </div>
-                <Button type="submit" variant="outline-primary" className="w-100 mb-3">Войти</Button>
-              </Form>
+              {({ errors, touched, handleSubmit }) => (
+                <Form onSubmit={handleSubmit}>
+                  <div className="form-floating mb-3">
+                    <Field
+                      id="username"
+                      type="text"
+                      name="username"
+                      className={(errors.username && touched.username) || authFailed
+                        ? 'form-control is-invalid'
+                        : 'form-control'}
+                      placeholder="Ваш ник"
+                      autoFocus
+                    />
+                    <label htmlFor="username">Ваш ник</label>
+                    <ErrorMessage name="username">
+                      {(msg) => <div className="text-danger fw-lighter fs-6">{msg}</div>}
+                    </ErrorMessage>
+                  </div>
+                  <div className="form-floating mb-4 position-relative">
+                    <Field
+                      id="password"
+                      type="password"
+                      name="password"
+                      className={(errors.password && touched.password) || authFailed
+                        ? 'form-control is-invalid'
+                        : 'form-control'}
+                      placeholder="Пароль"
+                    />
+                    <label htmlFor="password">Пароль</label>
+                    <ErrorMessage name="password">
+                      {(msg) => <div className="text-danger fw-lighter fs-6">{msg}</div>}
+                    </ErrorMessage>
+                    {authFailed && (
+                      <Form.Control.Feedback type="invalid" tooltip>
+                        Неверные имя пользователя или пароль
+                      </Form.Control.Feedback>
+                    )}
+                  </div>
+                  <Button type="submit" variant="primary" className="w-100 mb-3">Войти</Button>
+                </Form>
+              )}
             </Formik>
           </Card.Body>
           <Card.Footer className="p-4">

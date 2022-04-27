@@ -11,7 +11,7 @@ import Login from './Login.jsx';
 import NotFound from './NotFound.jsx';
 import MyTest from './MyTest.jsx';
 import AuthContext from '../contexts/index.jsx';
-import useAuth from '../hooks/index.jsx';
+// import useAuth from '../hooks/index.jsx';
 import Chat from './Chat.jsx';
 
 const AuthProvider = ({ children }) => {
@@ -31,11 +31,12 @@ const AuthProvider = ({ children }) => {
 };
 
 const PrivateRoute = ({ children }) => {
-  const auth = useAuth();
+  // const auth = useAuth();
   const location = useLocation();
+  const userId = JSON.parse(localStorage.getItem('userId'));
 
   return (
-    auth.loggedIn ? children : <Navigate to="/login" state={{ from: location }} />
+    (userId && userId.token) ? children : <Navigate to="/login" state={{ from: location }} />
   );
 };
 
