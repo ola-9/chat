@@ -1,6 +1,8 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';
-import { Card, Button, Form, Container } from 'react-bootstrap';
+import {
+  Card, Button, Form, Container,
+} from 'react-bootstrap';
 import { Formik, Field, ErrorMessage } from 'formik';
 import * as yup from 'yup';
 import axios from 'axios';

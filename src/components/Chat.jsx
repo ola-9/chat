@@ -29,7 +29,7 @@ const Chat = () => {
       // console.log('channels: ', channels);
       // console.log('messages: ', messages);
       // console.log('currentChannelId: ', currentChannelId);
-      dispatch(channelsActions.setChannels({ entities: channels, ids: Object.keys(channels) }));
+      dispatch(channelsActions.addChannels(channels));
       setCurrChannelId(currentChannelId);
     };
 
