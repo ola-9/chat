@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Navbar, Container } from 'react-bootstrap';
 import {
   BrowserRouter as Router,
   Routes,
@@ -9,7 +8,6 @@ import {
 } from 'react-router-dom';
 import Login from './Login.jsx';
 import NotFound from './NotFound.jsx';
-import MyTest from './MyTest.jsx';
 import AuthContext from '../contexts/index.jsx';
 // import useAuth from '../hooks/index.jsx';
 import Chat from './Chat.jsx';
@@ -34,6 +32,7 @@ const PrivateRoute = ({ children }) => {
   // const auth = useAuth();
   const location = useLocation();
   const userId = JSON.parse(localStorage.getItem('userId'));
+  // localStorage.removeItem('userId');
 
   return (
     (userId && userId.token) ? children : <Navigate to="/login" state={{ from: location }} />
@@ -44,26 +43,18 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-        <Navbar variant="light" bg="white" expand="lg" className="shadow-sm">
-          <Container>
-            <Navbar.Brand href="/">Hexlet Chat</Navbar.Brand>
-          </Container>
-        </Navbar>
-        <Container fluid className="h-100">
-          <Routes>
-            <Route
-              path="/"
-              element={(
-                <PrivateRoute>
-                  <Chat />
-                </PrivateRoute>
-              )}
-            />
-            <Route path="/login" element={<Login />} />
-            <Route path="/test" element={<MyTest />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Container>
+        <Routes>
+          <Route
+            path="/"
+            element={(
+              <PrivateRoute>
+                <Chat />
+              </PrivateRoute>
+            )}
+          />
+          <Route path="/login" element={<Login />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </Router>
     </AuthProvider>
   );
