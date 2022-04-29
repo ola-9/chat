@@ -10,6 +10,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/index.jsx';
 import routes from '../routes.js';
 import Navigation from './Navigation.jsx';
+import loginImage from '../../assets/login.jpg';
 
 const initialValues = {
   username: '',
@@ -56,16 +57,25 @@ const Login = (props) => {
       <div className="row justify-content-center align-content-center h-100">
         <div className="col-12 col-md-8 col-xxl-6">
           <Card className="shadow-sm">
-            <Card.Body>
-              <h1 className="text-center mb-4">Войти</h1>
-              <Card.Img src="./assets/login.jpeg" />
+            <Card.Body className="row p-5">
+              <div className="col-12 col-md-6 d-flex align-items-center justify-content-center">
+                <Card.Img
+                  src={loginImage}
+                  className="rounded-circle"
+                  alt="Войти"
+                />
+              </div>
               <Formik
                 initialValues={initialValues}
                 validationSchema={validationSchema}
                 onSubmit={onSubmit}
               >
                 {({ errors, touched, handleSubmit }) => (
-                  <Form onSubmit={handleSubmit}>
+                  <Form
+                    onSubmit={handleSubmit}
+                    className="col-12 col-md-6 mt-3 mt-mb-0"
+                  >
+                    <h1 className="text-center mb-4">Войти</h1>
                     <div className="form-floating mb-3">
                       <Field
                         id="username"
@@ -102,7 +112,7 @@ const Login = (props) => {
                         </Form.Control.Feedback>
                       )}
                     </div>
-                    <Button type="submit" variant="primary" className="w-100 mb-3">Войти</Button>
+                    <Button type="submit" variant="outline-dark" className="w-100 mb-3">Войти</Button>
                   </Form>
                 )}
               </Formik>

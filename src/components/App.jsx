@@ -32,7 +32,7 @@ const PrivateRoute = ({ children }) => {
   // const auth = useAuth();
   const location = useLocation();
   const userId = JSON.parse(localStorage.getItem('userId'));
-  // localStorage.removeItem('userId');
+  localStorage.removeItem('userId');
 
   return (
     (userId && userId.token) ? children : <Navigate to="/login" state={{ from: location }} />

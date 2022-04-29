@@ -50,6 +50,7 @@
     "react-redux": "^8.0.1",
     "react-router-dom": "^6.3.0",
     "regenerator-runtime": "^0.13.9",
+    "socket.io": "^4.5.0",
     "yup": "^0.32.11"
   },
   "devDependencies": {
@@ -79,6 +80,7 @@
     "postcss-preset-env": "^7.4.1",
     "sass": "^1.50.0",
     "sass-loader": "^12.6.0",
+    "url-loader": "^4.1.1",
     "webpack": "^5.69.1",
     "webpack-cli": "^4.9.2",
     "webpack-dev-server": "^4.7.4"
