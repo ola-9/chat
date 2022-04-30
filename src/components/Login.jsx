@@ -9,8 +9,7 @@ import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/index.jsx';
 import routes from '../routes.js';
-import Navigation from './Navigation.jsx';
-import loginImage from '../../assets/login.jpg';
+import loginImage from '../../assets/login.png';
 
 const initialValues = {
   username: '',
@@ -30,18 +29,16 @@ const Login = (props) => {
   const { state } = props;
 
   const onSubmit = async (values) => {
-    console.log('form data: ', values);
     setAuthFailed(false);
 
     try {
       const res = await axios.post(routes.loginPath(), values);
-      console.log(res.data);
       localStorage.setItem('userId', JSON.stringify(res.data));
       auth.logIn();
+      console.log('loggedIn inside Login: ', auth.loggedIn);
       const { from } = location.state || state || { from: { pathname: '/' } };
-      navigate(from);
+      navigate(from, { replace: true });
     } catch (err) {
-      // console.log("you've got error: ", err);
       if (err.isAxiosError && err.response.status === 401) {
         setAuthFailed(true);
         console.log('неверный логин или пароль');
@@ -53,7 +50,7 @@ const Login = (props) => {
 
   return (
     <Container fluid className="h-100">
-      <Navigation />
+      {/* <Navigation /> */}
       <div className="row justify-content-center align-content-center h-100">
         <div className="col-12 col-md-8 col-xxl-6">
           <Card className="shadow-sm">
@@ -112,7 +109,7 @@ const Login = (props) => {
                         </Form.Control.Feedback>
                       )}
                     </div>
-                    <Button type="submit" variant="outline-dark" className="w-100 mb-3">Войти</Button>
+                    <Button type="submit" variant="primary" className="w-100 mb-3">Войти</Button>
                   </Form>
                 )}
               </Formik>

@@ -3,9 +3,9 @@ import axios from 'axios';
 import { Container, Row, Col } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import routes from '../routes.js';
-import Navigation from './Navigation.jsx';
 import Channel from './Channel.jsx';
 import { actions as channelsActions } from '../slices/channelsSlice.js';
+import useAuth from '../hooks/index.jsx';
 
 const getAuthHeader = () => {
   const userId = JSON.parse(localStorage.getItem('userId'));
@@ -18,17 +18,16 @@ const getAuthHeader = () => {
 };
 
 const Chat = () => {
+  const auth = useAuth();
+  console.log('loggedIn inside Chat: ', auth.loggedIn);
+
   const dispatch = useDispatch();
   const [currChannelId, setCurrChannelId] = useState(null);
 
   useEffect(() => {
     const fetchContent = async () => {
       const { data } = await axios.get(routes.dataPath(), { headers: getAuthHeader() });
-      // console.log(data);
       const { channels, currentChannelId } = data;
-      // console.log('channels: ', channels);
-      // console.log('messages: ', messages);
-      // console.log('currentChannelId: ', currentChannelId);
       dispatch(channelsActions.addChannels(channels));
       setCurrChannelId(currentChannelId);
     };
@@ -41,7 +40,7 @@ const Chat = () => {
 
   return (
     <div className="d-flex flex-column h-100">
-      <Navigation />
+      {/* <Navigation /> */}
       <Container className="h-100 my-4 overflow-hidden rounded shadow">
         <Row className="h-100 bg-white flex-md-row">
           <Col xs={4} md="2" className="border-end pt-5 px-0 bg-light">
@@ -71,14 +70,14 @@ const Chat = () => {
               </div>
               <div className="chat-messages overflow-auto px-5 " id="messages-box">
                 <div className="text-break mb-2">
-                  <b>Olga</b>
+                  <b>User 1</b>
                   :
                   тестовое сообщение
                 </div>
               </div>
               <div className="chat-messages overflow-auto px-5 " id="messages-box">
                 <div className="text-break mb-2">
-                  <b>Olga</b>
+                  <b>User 2</b>
                   :
                   еще одно тестовое сообщение
                 </div>
