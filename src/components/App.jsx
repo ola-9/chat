@@ -13,7 +13,7 @@ import NotFound from './NotFound.jsx';
 import AuthContext from '../contexts/index.jsx';
 import Chat from './Chat.jsx';
 import LogOutBtn from './LogOutBtn.jsx';
-// import useAuth from '../hooks/index.jsx';
+import useAuth from '../hooks/index.jsx';
 
 const AuthProvider = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -32,13 +32,13 @@ const AuthProvider = ({ children }) => {
 };
 
 const PrivateRoute = ({ children }) => {
-  // const auth = useAuth();
+  const auth = useAuth();
   const location = useLocation();
   const userId = JSON.parse(localStorage.getItem('userId'));
   // localStorage.removeItem('userId');
   return (
-    (userId && userId.token) ? children : <Navigate to="/login" state={{ from: location }} />
-    // auth.loggedIn ? children : <Navigate to="/login" state={{ from: location }} />
+    // (userId && userId.token) ? children : <Navigate to="/login" state={{ from: location }} />
+    auth.loggedIn ? children : <Navigate to="/login" state={{ from: location }} />
   );
 };
 
