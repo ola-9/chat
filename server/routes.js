@@ -52,7 +52,7 @@ export default (app, defaultState = {}) => {
       state.messages.push(messageWithId);
       acknowledge({ status: 'ok' });
       // app.io.emit('newMessage', messageWithId);
-      app.io.emit('newMessage', 'messageWithId');
+      app.io.emit('newMessage', 'some mgs in browser console');
     });
 
     socket.on('newChannel', (channel, acknowledge = _.noop) => {

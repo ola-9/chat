@@ -5,15 +5,16 @@ import {
   Route,
   useLocation,
   Navigate,
+  NavLink,
 } from 'react-router-dom';
 import { Navbar, Container } from 'react-bootstrap';
-import { io } from 'socket.io-client';
+// import { io } from 'socket.io-client';
 import Login from './Login.jsx';
 import NotFound from './NotFound.jsx';
 import AuthContext from '../contexts/index.jsx';
 import Chat from './Chat.jsx';
 import LogOutBtn from './LogOutBtn.jsx';
-import useAuth from '../hooks/index.jsx';
+// import useAuth from '../hooks/index.jsx';
 
 const AuthProvider = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -32,28 +33,30 @@ const AuthProvider = ({ children }) => {
 };
 
 const PrivateRoute = ({ children }) => {
-  const auth = useAuth();
+  // const auth = useAuth();
   const location = useLocation();
-  // const userId = JSON.parse(localStorage.getItem('userId'));
+  const userId = JSON.parse(localStorage.getItem('userId'));
   // localStorage.removeItem('userId');
   return (
-    // (userId && userId.token) ? children : <Navigate to="/login" state={{ from: location }} />
-    auth.loggedIn ? children : <Navigate to="/login" state={{ from: location }} />
+    (userId && userId.token) ? children : <Navigate to="/login" state={{ from: location }} />
+    // auth.loggedIn ? children : <Navigate to="/login" state={{ from: location }} />
   );
 };
 
 function App() {
-  const socket = io();
-  socket.on('newMessage', (msg) => {
-    console.log(msg);
-  });
+  // const socket = io();
+  // socket.on('newMessage', (msg) => {
+  //   console.log(msg);
+  // });
 
   return (
     <AuthProvider>
       <Router>
         <Navbar variant="light" bg="white" expand="lg" className="shadow-sm">
           <Container>
-            <Navbar.Brand href="/">Hexlet Chat</Navbar.Brand>
+            <Navbar.Brand>
+              <NavLink className="navbar-brand" to="/">Hexlet Chat</NavLink>
+            </Navbar.Brand>
             {/* <NavLink className="navbar-brand" to="/">Hexlet Chat</NavLink> */}
             <LogOutBtn />
           </Container>
