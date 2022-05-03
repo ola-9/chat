@@ -19,6 +19,8 @@ const buildState = (defaultState) => {
     currentChannelId: generalChannelId,
     users: [
       { id: 1, username: 'admin', password: 'admin' },
+      { id: 2, username: 'user', password: 'user' },
+
     ],
   };
 
@@ -51,8 +53,7 @@ export default (app, defaultState = {}) => {
       };
       state.messages.push(messageWithId);
       acknowledge({ status: 'ok' });
-      // app.io.emit('newMessage', messageWithId);
-      app.io.emit('newMessage', 'some mgs in browser console');
+      app.io.emit('newMessage', messageWithId);
     });
 
     socket.on('newChannel', (channel, acknowledge = _.noop) => {

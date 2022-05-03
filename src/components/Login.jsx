@@ -35,13 +35,11 @@ const Login = (props) => {
       const res = await axios.post(routes.loginPath(), values);
       localStorage.setItem('userId', JSON.stringify(res.data));
       auth.logIn();
-      console.log('loggedIn inside Login: ', auth.loggedIn);
       const { from } = location.state || state || { from: { pathname: '/' } };
       navigate(from, { replace: true });
     } catch (err) {
       if (err.isAxiosError && err.response.status === 401) {
         setAuthFailed(true);
-        console.log('неверный логин или пароль');
         return;
       }
       throw err;

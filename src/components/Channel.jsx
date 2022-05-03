@@ -3,6 +3,7 @@ import cn from 'classnames';
 
 const Channel = ({ channel, currChannelId }) => {
   const { id, name } = channel;
+
   const btnClass = cn('w-100 rounded-0 text-start btn', {
     'btn-secondary': id === currChannelId,
   });
