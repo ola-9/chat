@@ -20,8 +20,11 @@ const NewMesageInput = ({ socket, currChannelId, username }) => {
         text: values.text,
         channelId: currChannelId,
         author: username,
+        data: new Date(),
       };
-      socket.emit('newMessage', newMessage); // send msg to socket server
+      socket.emit('newMessage', newMessage, (data) => {
+        console.log(data);
+      }); // send msg to socket server
     },
   });
 
