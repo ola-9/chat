@@ -4,12 +4,12 @@ import { useFormik } from 'formik';
 import { Button, Form } from 'react-bootstrap';
 import { actions } from '../slices/messagesSlice.js';
 
-const NewMesageInput = ({ socket, currChannelId, username }) => {
+const NewChatMesage = ({ socket, currChannelId, username }) => {
   const dispatch = useDispatch();
   const inputRef = useRef();
-  // useEffect(() => {
-  //   inputRef.current.focus();
-  // }, []);
+  useEffect(() => {
+    inputRef.current.select();
+  }, []);
   const formik = useFormik({
     initialValues: {
       text: '',
@@ -24,17 +24,20 @@ const NewMesageInput = ({ socket, currChannelId, username }) => {
       };
       socket.emit('newMessage', newMessage, (data) => {
         console.log(data);
-      }); // send msg to socket server
+      });
+      socket.on('newMessage', (message) => {
+        dispatch(actions.addMessage(message));
+      });
     },
   });
 
-  useEffect(() => {
-    // inputRef.current.focus();
-    socket.on('newMessage', (message) => {
-      // console.log('message inside useEffect: ', message);
-      dispatch(actions.addMessage(message));
-    });
-  }, [socket]);
+  // useEffect(() => {
+  // inputRef.current.focus();
+  // socket.on('newMessage', (message) => {
+  //   // console.log('message inside useEffect: ', message);
+  //   dispatch(actions.addMessage(message));
+  // });
+  // }, [socket]);
 
   return (
     <div className="mt-auto px-5 py-3">
@@ -56,4 +59,4 @@ const NewMesageInput = ({ socket, currChannelId, username }) => {
   );
 };
 
-export default NewMesageInput;
+export default NewChatMesage;

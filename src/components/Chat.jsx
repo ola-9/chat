@@ -3,12 +3,12 @@ import axios from 'axios';
 import { Container, Row, Col } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import routes from '../routes.js';
-import Channel from './Channel.jsx';
+import ChatButton from './ChatButton.jsx';
 import { actions as channelsActions } from '../slices/channelsSlice.js';
 import { actions as messagesActions } from '../slices/messagesSlice.js';
-import NewMessageInput from './NewMesageInput.jsx';
+import NewChatMessage from './NewChatMesage.jsx';
 import ChatMessage from './ChatMessage.jsx';
-import AddChannelModal from './AddChannelModal.jsx';
+import getModal from './modals/index.jsx';
 
 const getAuthHeader = () => {
   const userId = JSON.parse(localStorage.getItem('userId'));
@@ -18,6 +18,26 @@ const getAuthHeader = () => {
   }
 
   return {};
+};
+
+const renderModal = ({
+  modalInfo, hideModal, setCurrChannelId, socket,
+}) => {
+  if (!modalInfo.type) {
+    console.log('!!!!Null');
+    return null;
+  }
+  console.log('modalInfo: ', modalInfo);
+  const Component = getModal(modalInfo.type);
+  // console.log('Component: ', Component);
+  return (
+    <Component
+      modalInfo={modalInfo}
+      setCurrChannelId={setCurrChannelId}
+      socket={socket}
+      onHide={hideModal}
+    />
+  );
 };
 
 const Chat = ({ socket }) => {
@@ -32,7 +52,7 @@ const Chat = ({ socket }) => {
       const { channels, currentChannelId, messages } = data;
       dispatch(channelsActions.addChannels(channels));
       dispatch(messagesActions.addMessages(messages));
-
+      console.log('channels on server: ', channels);
       setCurrUser(username);
       setCurrChannelId(currentChannelId);
     };
@@ -42,24 +62,17 @@ const Chat = ({ socket }) => {
 
   const channels = useSelector((state) => Object.values(state.channelsReducer.entities));
   const currChannel = channels.find((channel) => channel.id === currChannelId) ?? '';
-  // console.log('currChannel: ', currChannel);
-  // console.log('currChannel: ', currChannel.name);
+  // console.log('channels in store: ', channels);
 
   const messages = useSelector((state) => Object.values(state.messagesReducer.entities));
   // console.log('messages: ', messages);
   const currChannelMessages = messages.filter((message) => message.channelId === currChannelId);
   // console.log('currChannelMessages: ', currChannelMessages);
 
-  const [show, setShow] = useState(false);
-
-  const addChannelModalHandler = () => {
-    // console.log('add channel');
-    setShow(true);
-  };
-
-  const onChannelClickHanlder = (channelId) => {
-    setCurrChannelId(channelId);
-  };
+  const [modalInfo, setModalInfo] = useState({ type: null, channel: null });
+  const hideModal = () => setModalInfo({ type: null, channel: null });
+  const showModal = (type, channel = null) => setModalInfo({ type, channel });
+  console.log('modalInfo: ', modalInfo);
 
   return (
     <div className="d-flex flex-column h-100">
@@ -68,7 +81,7 @@ const Chat = ({ socket }) => {
           <Col xs={4} md="2" className="border-end pt-5 px-0 bg-light">
             <div className="d-flex justify-content-between mb-2 ps-4 pe-2">
               <span>Каналы</span>
-              <button onClick={addChannelModalHandler} type="button" className="p-0 text-primary btn btn-group-vertical">
+              <button onClick={() => showModal('adding')} type="button" className="p-0 text-primary btn btn-group-vertical">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="20" height="20" fill="currentColor">
                   <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
                   <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
@@ -78,12 +91,14 @@ const Chat = ({ socket }) => {
             </div>
             <ul className="nav flex-column nav-pills nav-fill px-2">
               {channels.map((channel) => (
-                <Channel
-                  key={channel.id}
-                  channel={channel}
-                  currChannelId={currChannelId}
-                  onChannelClick={onChannelClickHanlder}
-                />
+                <li className="nav-item w-100" key={channel.id}>
+                  <ChatButton
+                    channel={channel}
+                    currChannelId={currChannelId}
+                    setCurrChannelId={setCurrChannelId}
+                    showModal={showModal}
+                  />
+                </li>
               ))}
             </ul>
           </Col>
@@ -107,19 +122,15 @@ const Chat = ({ socket }) => {
                   message={message}
                 />
               ))}
-              <NewMessageInput socket={socket} currChannelId={currChannelId} username={currUser} />
+              <NewChatMessage socket={socket} currChannelId={currChannelId} username={currUser} />
             </div>
           </Col>
         </Row>
       </Container>
-      <AddChannelModal
-        show={show}
-        setShow={setShow}
-        socket={socket}
-        setCurrChannelId={setCurrChannelId}
-      />
+      {renderModal({
+        modalInfo, hideModal, setCurrChannelId, socket,
+      })}
     </div>
-
   );
 };
 
