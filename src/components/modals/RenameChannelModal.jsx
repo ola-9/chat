@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import {
   Button, Modal, FormGroup, FormControl, FormLabel,
 } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import { actions as channelsActions } from '../../slices/channelsSlice.js';
 
 const RenameChannelModal = (props) => {
@@ -34,6 +35,8 @@ const RenameChannelModal = (props) => {
     },
   });
 
+  const { t } = useTranslation('translation', { keyPrefix: 'chat.modals.rename' });
+
   return (
     <Modal
       show
@@ -42,7 +45,7 @@ const RenameChannelModal = (props) => {
       centered
     >
       <Modal.Header closeButton>
-        <Modal.Title>Переименовать канал</Modal.Title>
+        <Modal.Title>{t('title')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <form onSubmit={formik.handleSubmit}>
@@ -51,7 +54,7 @@ const RenameChannelModal = (props) => {
               htmlFor="name"
               className="visually-hidden"
             >
-              Имя канала
+              {t('inputLabel')}
             </FormLabel>
             <FormControl
               className="mb-2"
@@ -63,8 +66,8 @@ const RenameChannelModal = (props) => {
               id="name"
             />
             <div className="d-flex justify-content-end">
-              <Button className="me-2" variant="secondary" onClick={onHide}>Отменить</Button>
-              <Button type="submit" variant="primary">Отправить</Button>
+              <Button className="me-2" variant="secondary" onClick={onHide}>{t('cancelBtn')}</Button>
+              <Button type="submit" variant="primary">{t('submitBtn')}</Button>
             </div>
           </FormGroup>
         </form>

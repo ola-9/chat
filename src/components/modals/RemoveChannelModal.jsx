@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Modal, Button } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import { actions as channelsActions } from '../../slices/channelsSlice.js';
 
 const RemoveChannelModal = (props) => {
@@ -19,6 +20,8 @@ const RemoveChannelModal = (props) => {
     onHide();
   };
 
+  const { t } = useTranslation('translation', { keyPrefix: 'chat.modals.remove' });
+
   return (
     <Modal
       show
@@ -28,14 +31,14 @@ const RemoveChannelModal = (props) => {
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          Удалить канал
+          {(t('title'))}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p className="lead">Уверены?</p>
+        <p className="lead">{t('body')}</p>
         <div className="d-flex justify-content-end">
-          <Button variant="secondary" className="me-2" onClick={onHide}>Отменить</Button>
-          <Button variant="danger" onClick={handleRemove}>Удалить</Button>
+          <Button variant="secondary" className="me-2" onClick={onHide}>{t('cancelBtn')}</Button>
+          <Button variant="danger" onClick={handleRemove}>{(t('removeBtn'))}</Button>
         </div>
       </Modal.Body>
     </Modal>

@@ -7,19 +7,10 @@ import { Formik, Field, ErrorMessage } from 'formik';
 import * as yup from 'yup';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import useAuth from '../hooks/index.jsx';
 import routes from '../routes.js';
 import loginImage from '../../assets/login.png';
-
-const initialValues = {
-  username: '',
-  password: '',
-};
-
-const validationSchema = yup.object({
-  username: yup.string().required('необходимо ввести логин'),
-  password: yup.string().required('необходимо ввести пароль'),
-});
 
 const Login = (props) => {
   const auth = useAuth();
@@ -46,6 +37,8 @@ const Login = (props) => {
     }
   };
 
+  const { t } = useTranslation('translation', { keyPrefix: 'login' });
+
   return (
     <Container fluid className="h-100">
       {/* <Navigation /> */}
@@ -57,12 +50,17 @@ const Login = (props) => {
                 <Card.Img
                   src={loginImage}
                   className="rounded-circle"
-                  alt="Войти"
+                  alt={t('card.img.alt')}
                 />
               </div>
               <Formik
-                initialValues={initialValues}
-                validationSchema={validationSchema}
+                initialValues={{ username: '', password: '' }}
+                validationSchema={
+                  yup.object({
+                    username: yup.string().required(t('card.form.errors.validation')),
+                    password: yup.string().required(t('card.form.errors.validation')),
+                  })
+                }
                 onSubmit={onSubmit}
               >
                 {({ errors, touched, handleSubmit }) => (
@@ -70,7 +68,7 @@ const Login = (props) => {
                     onSubmit={handleSubmit}
                     className="col-12 col-md-6 mt-3 mt-mb-0"
                   >
-                    <h1 className="text-center mb-4">Войти</h1>
+                    <h1 className="text-center mb-4">{t('card.form.header')}</h1>
                     <div className="form-floating mb-3">
                       <Field
                         id="username"
@@ -79,10 +77,10 @@ const Login = (props) => {
                         className={(errors.username && touched.username) || authFailed
                           ? 'form-control is-invalid'
                           : 'form-control'}
-                        placeholder="Ваш ник"
+                        placeholder={t('card.form.username.placeholder')}
                         autoFocus
                       />
-                      <label htmlFor="username">Ваш ник</label>
+                      <label htmlFor="username">{t('card.form.username.label')}</label>
                       <ErrorMessage name="username">
                         {(msg) => <div className="text-danger fw-lighter fs-6">{msg}</div>}
                       </ErrorMessage>
@@ -95,27 +93,32 @@ const Login = (props) => {
                         className={(errors.password && touched.password) || authFailed
                           ? 'form-control is-invalid'
                           : 'form-control'}
-                        placeholder="Пароль"
+                        placeholder={t('card.form.password.placeholder')}
                       />
-                      <label htmlFor="password">Пароль</label>
+                      <label htmlFor="password">{t('card.form.password.label')}</label>
                       <ErrorMessage name="password">
                         {(msg) => <div className="text-danger fw-lighter fs-6">{msg}</div>}
                       </ErrorMessage>
                       {authFailed && (
                         <Form.Control.Feedback type="invalid" tooltip>
-                          Неверные имя пользователя или пароль
+                          {t('card.form.errors.auth')}
                         </Form.Control.Feedback>
                       )}
                     </div>
-                    <Button type="submit" variant="primary" className="w-100 mb-3">Войти</Button>
+                    <Button type="submit" variant="primary" className="w-100 mb-3">{t('card.form.submitBtn')}</Button>
                   </Form>
                 )}
               </Formik>
             </Card.Body>
             <Card.Footer className="p-4">
               <div className="text-center">
-                <span>Нет аккаунта?&nbsp;</span>
-                <a href="/signup">Регистрация</a>
+                <span>
+                  {t('card.footer.question')}
+                  &nbsp;
+                </span>
+                <a href="/signup">
+                  {t('card.footer.signup')}
+                </a>
               </div>
             </Card.Footer>
           </Card>

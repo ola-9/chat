@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Container, Row, Col } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import routes from '../routes.js';
 import ChatButton from './ChatButton.jsx';
 import { actions as channelsActions } from '../slices/channelsSlice.js';
@@ -24,10 +25,10 @@ const renderModal = ({
   modalInfo, hideModal, setCurrChannelId, socket,
 }) => {
   if (!modalInfo.type) {
-    console.log('!!!!Null');
+    // console.log('!!!!Null');
     return null;
   }
-  console.log('modalInfo: ', modalInfo);
+  // console.log('modalInfo: ', modalInfo);
   const Component = getModal(modalInfo.type);
   // console.log('Component: ', Component);
   return (
@@ -52,7 +53,7 @@ const Chat = ({ socket }) => {
       const { channels, currentChannelId, messages } = data;
       dispatch(channelsActions.addChannels(channels));
       dispatch(messagesActions.addMessages(messages));
-      console.log('channels on server: ', channels);
+      // console.log('channels on server: ', channels);
       setCurrUser(username);
       setCurrChannelId(currentChannelId);
     };
@@ -62,7 +63,7 @@ const Chat = ({ socket }) => {
 
   const channels = useSelector((state) => Object.values(state.channelsReducer.entities));
   const currChannel = channels.find((channel) => channel.id === currChannelId) ?? '';
-  // console.log('channels in store: ', channels);
+  // console.log('channels in store Chat: ', channels);
 
   const messages = useSelector((state) => Object.values(state.messagesReducer.entities));
   // console.log('messages: ', messages);
@@ -72,7 +73,9 @@ const Chat = ({ socket }) => {
   const [modalInfo, setModalInfo] = useState({ type: null, channel: null });
   const hideModal = () => setModalInfo({ type: null, channel: null });
   const showModal = (type, channel = null) => setModalInfo({ type, channel });
-  console.log('modalInfo: ', modalInfo);
+  // console.log('modalInfo: ', modalInfo);
+
+  const { t } = useTranslation('translation', { keyPrefix: 'chat' });
 
   return (
     <div className="d-flex flex-column h-100">
@@ -80,7 +83,9 @@ const Chat = ({ socket }) => {
         <Row className="h-100 bg-white flex-md-row">
           <Col xs={4} md="2" className="border-end pt-5 px-0 bg-light">
             <div className="d-flex justify-content-between mb-2 ps-4 pe-2">
-              <span>Каналы</span>
+              <span>
+                {t('channels.header')}
+              </span>
               <button onClick={() => showModal('adding')} type="button" className="p-0 text-primary btn btn-group-vertical">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="20" height="20" fill="currentColor">
                   <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
@@ -112,8 +117,7 @@ const Chat = ({ socket }) => {
                   </b>
                 </p>
                 <span className="text-muted">
-                  {currChannelMessages.length}
-                  &nbsp;сообщений //окончания!!
+                  {t('messages.сounter.count', { count: currChannelMessages.length })}
                 </span>
               </div>
               {currChannelMessages.map((message) => (

@@ -9,6 +9,10 @@ import {
 } from 'react-router-dom';
 import { Navbar, Container } from 'react-bootstrap';
 import { io } from 'socket.io-client';
+import { useTranslation } from 'react-i18next';
+import { ToastContainer } from 'react-toastify';
+// import 'react-toastify/dist/ReactToastify.css';
+// import 'react-toastify/dist/ReactToastify.min.css';
 import Login from './Login.jsx';
 import NotFound from './NotFound.jsx';
 import AuthContext from '../contexts/index.jsx';
@@ -43,31 +47,45 @@ const PrivateRoute = ({ children }) => {
   );
 };
 
-const App = () => (
-  <AuthProvider>
-    <Router>
-      <Navbar variant="light" bg="white" expand="lg" className="shadow-sm">
-        <Container>
-          <Navbar.Brand>
-            <NavLink className="navbar-brand" to="/">Hexlet Chat</NavLink>
-          </Navbar.Brand>
-          <LogOutBtn />
-        </Container>
-      </Navbar>
-      <Routes>
-        <Route
-          path="/"
-          element={(
-            <PrivateRoute>
-              <Chat socket={socket} />
-            </PrivateRoute>
-          )}
-        />
-        <Route path="/login" element={<Login />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </Router>
-  </AuthProvider>
-);
+const App = () => {
+  const { t } = useTranslation();
+  return (
+    <AuthProvider>
+      <Router>
+        <Navbar variant="light" bg="white" expand="lg" className="shadow-sm">
+          <Container>
+            <Navbar.Brand>
+              <NavLink className="navbar-brand" to="/">{t('header.brand')}</NavLink>
+            </Navbar.Brand>
+            <LogOutBtn />
+          </Container>
+        </Navbar>
+        <Routes>
+          <Route
+            path="/"
+            element={(
+              <PrivateRoute>
+                <Chat socket={socket} />
+              </PrivateRoute>
+            )}
+          />
+          <Route path="/login" element={<Login />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Router>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+    </AuthProvider>
+  );
+};
 
 export default App;

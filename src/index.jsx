@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
+import './i18n';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import 'bootstrap/scss/bootstrap.scss';
 import App from './components/App.jsx';

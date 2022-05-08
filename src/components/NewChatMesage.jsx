@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import { Button, Form } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import { actions } from '../slices/messagesSlice.js';
 
 const NewChatMesage = ({ socket, currChannelId, username }) => {
@@ -39,6 +40,8 @@ const NewChatMesage = ({ socket, currChannelId, username }) => {
   // });
   // }, [socket]);
 
+  const { t } = useTranslation();
+
   return (
     <div className="mt-auto px-5 py-3">
       <Form onSubmit={formik.handleSubmit}>
@@ -47,12 +50,12 @@ const NewChatMesage = ({ socket, currChannelId, username }) => {
             className="me-2"
             onChange={formik.handleChange}
             value={formik.values.text}
-            placeholder="Введите сообщение..."
+            placeholder={t('chat.messages.inputPlaceholder')}
             name="text"
             id="text"
             ref={inputRef}
           />
-          <Button type="submit" variant="primary">Отправить</Button>
+          <Button type="submit" variant="primary">{t('chat.messages.sendMessageBtn')}</Button>
         </Form.Group>
       </Form>
     </div>
