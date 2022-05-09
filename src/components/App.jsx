@@ -20,6 +20,7 @@ import AuthContext from '../contexts/index.jsx';
 import Chat from './Chat.jsx';
 import LogOutBtn from './LogOutBtn.jsx';
 import useAuth from '../hooks/index.jsx';
+import Signup from './Signup.jsx';
 
 const socket = io();
 
@@ -53,12 +54,14 @@ const App = () => {
 
   yup.setLocale({
     string: {
-      min: () => ({ key: 'errors.minMax' }),
-      max: () => ({ key: 'errors.minMax' }),
+      min: () => ({ key: 'errors.min' }),
+      minMax: () => ({ key: 'errors.max' }),
+
     },
     mixed: {
       notOneOf: () => ({ key: 'errors.notUnique' }),
       required: () => ({ key: 'errors.required' }),
+      oneOf: () => ({ key: 'errors.passConfirmation' }),
     },
   });
 
@@ -83,6 +86,7 @@ const App = () => {
             )}
           />
           <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>

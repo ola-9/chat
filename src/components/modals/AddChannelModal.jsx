@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { actions as channelsActions } from '../../slices/channelsSlice.js';
 import i18n from '../../i18n.js';
-import getSchema from '../../yupSchema.js';
+import { getChannelSchema } from '../../yupSchema.js';
 
 const AddChannelModal = (props) => {
   // console.log(props);
@@ -29,7 +29,7 @@ const AddChannelModal = (props) => {
     inputRef.current.focus();
   }, []);
 
-  const schema = getSchema(channelNames);
+  const schema = getChannelSchema(channelNames);
 
   const dispatch = useDispatch();
   const formik = useFormik({

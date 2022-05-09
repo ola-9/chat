@@ -7,7 +7,7 @@ import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import i18n from '../../i18n.js';
 import { actions as channelsActions } from '../../slices/channelsSlice.js';
-import getSchema from '../../yupSchema.js';
+import { getChannelSchema } from '../../yupSchema.js';
 
 const RenameChannelModal = (props) => {
   const { onHide, modalInfo, socket } = props;
@@ -27,7 +27,7 @@ const RenameChannelModal = (props) => {
   const [inputValid, setInputValid] = useState(true);
   const [validationError, setValidationError] = useState('');
 
-  const schema = getSchema(channelNames);
+  const schema = getChannelSchema(channelNames);
 
   const formik = useFormik({
     initialValues: {
