@@ -4,11 +4,12 @@ import {
   Modal, Button, FormGroup, FormControl,
 } from 'react-bootstrap';
 import { useFormik } from 'formik';
-import * as yup from 'yup';
+// import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { actions as channelsActions } from '../../slices/channelsSlice.js';
 import i18n from '../../i18n.js';
+import getSchema from '../../yupSchema.js';
 
 const AddChannelModal = (props) => {
   // console.log(props);
@@ -28,25 +29,7 @@ const AddChannelModal = (props) => {
     inputRef.current.focus();
   }, []);
 
-  yup.setLocale({
-    string: {
-      min: () => ({ key: 'errors.minMax' }),
-      max: () => ({ key: 'errors.minMax' }),
-    },
-    mixed: {
-      notOneOf: () => ({ key: 'errors.notUnique' }),
-      required: () => ({ key: 'errors.required' }),
-    },
-  });
-
-  const schema = yup.object({
-    name: yup
-      .string()
-      .required()
-      .min(3)
-      .max(20)
-      .notOneOf(channelNames),
-  });
+  const schema = getSchema(channelNames);
 
   const dispatch = useDispatch();
   const formik = useFormik({

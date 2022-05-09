@@ -10,6 +10,7 @@ import { actions as messagesActions } from '../slices/messagesSlice.js';
 import NewChatMessage from './NewChatMesage.jsx';
 import ChatMessage from './ChatMessage.jsx';
 import getModal from './modals/index.jsx';
+import DataFetchErrorModal from './DataFetchErrorModal.jsx';
 
 const getAuthHeader = () => {
   const userId = JSON.parse(localStorage.getItem('userId'));
@@ -47,15 +48,22 @@ const Chat = ({ socket }) => {
   const [currChannelId, setCurrChannelId] = useState(null);
   const [currUser, setCurrUser] = useState('');
 
+  const [dataFetchError, setDataFetchError] = useState(false);
+
   useEffect(() => {
     const fetchContent = async () => {
-      const { data } = await axios.get(routes.dataPath(), { headers: getAuthHeader() });
-      const { channels, currentChannelId, messages } = data;
-      dispatch(channelsActions.addChannels(channels));
-      dispatch(messagesActions.addMessages(messages));
-      // console.log('channels on server: ', channels);
-      setCurrUser(username);
-      setCurrChannelId(currentChannelId);
+      try {
+        const { data } = await axios.get(routes.dataPath(), { headers: getAuthHeader() });
+        const { channels, currentChannelId, messages } = data;
+        dispatch(channelsActions.addChannels(channels));
+        dispatch(messagesActions.addMessages(messages));
+        // console.log('channels on server: ', channels);
+        setCurrUser(username);
+        setCurrChannelId(currentChannelId);
+      } catch (err) {
+        // console.log(err);
+        setDataFetchError(true);
+      }
     };
 
     fetchContent();
@@ -134,6 +142,7 @@ const Chat = ({ socket }) => {
       {renderModal({
         modalInfo, hideModal, setCurrChannelId, socket,
       })}
+      {dataFetchError ? <DataFetchErrorModal setDataFetchError={setDataFetchError} /> : null}
     </div>
   );
 };

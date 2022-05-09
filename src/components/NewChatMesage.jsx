@@ -8,9 +8,11 @@ import { actions } from '../slices/messagesSlice.js';
 const NewChatMesage = ({ socket, currChannelId, username }) => {
   const dispatch = useDispatch();
   const inputRef = useRef();
+
   useEffect(() => {
     inputRef.current.select();
   }, []);
+
   const formik = useFormik({
     initialValues: {
       text: '',
@@ -55,7 +57,13 @@ const NewChatMesage = ({ socket, currChannelId, username }) => {
             id="text"
             ref={inputRef}
           />
-          <Button type="submit" variant="primary">{t('chat.messages.sendMessageBtn')}</Button>
+          <Button
+            type="submit"
+            variant="primary"
+            disabled={formik.values.text.length === 0}
+          >
+            {t('chat.messages.sendMessageBtn')}
+          </Button>
         </Form.Group>
       </Form>
     </div>

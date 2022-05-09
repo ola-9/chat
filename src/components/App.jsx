@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { ToastContainer } from 'react-toastify';
 // import 'react-toastify/dist/ReactToastify.css';
 // import 'react-toastify/dist/ReactToastify.min.css';
+import * as yup from 'yup';
 import Login from './Login.jsx';
 import NotFound from './NotFound.jsx';
 import AuthContext from '../contexts/index.jsx';
@@ -49,6 +50,18 @@ const PrivateRoute = ({ children }) => {
 
 const App = () => {
   const { t } = useTranslation();
+
+  yup.setLocale({
+    string: {
+      min: () => ({ key: 'errors.minMax' }),
+      max: () => ({ key: 'errors.minMax' }),
+    },
+    mixed: {
+      notOneOf: () => ({ key: 'errors.notUnique' }),
+      required: () => ({ key: 'errors.required' }),
+    },
+  });
+
   return (
     <AuthProvider>
       <Router>
