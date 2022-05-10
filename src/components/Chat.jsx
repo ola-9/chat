@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Container, Row, Col } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import routes from '../routes.js';
 import ChatButton from './ChatButton.jsx';
 import { actions as channelsActions } from '../slices/channelsSlice.js';
@@ -10,7 +11,7 @@ import { actions as messagesActions } from '../slices/messagesSlice.js';
 import NewChatMessage from './NewChatMesage.jsx';
 import ChatMessage from './ChatMessage.jsx';
 import getModal from './modals/index.jsx';
-import DataFetchErrorModal from './DataFetchErrorModal.jsx';
+// import DataFetchErrorModal from './DataFetchErrorModal.jsx';
 
 const getAuthHeader = () => {
   const userId = JSON.parse(localStorage.getItem('userId'));
@@ -26,12 +27,11 @@ const renderModal = ({
   modalInfo, hideModal, setCurrChannelId, socket,
 }) => {
   if (!modalInfo.type) {
-    // console.log('!!!!Null');
     return null;
   }
-  // console.log('modalInfo: ', modalInfo);
+
   const Component = getModal(modalInfo.type);
-  // console.log('Component: ', Component);
+
   return (
     <Component
       modalInfo={modalInfo}
@@ -48,7 +48,7 @@ const Chat = ({ socket }) => {
   const [currChannelId, setCurrChannelId] = useState(null);
   const [currUser, setCurrUser] = useState('');
 
-  const [dataFetchError, setDataFetchError] = useState(false);
+  // const [dataFetchError, setDataFetchError] = useState(false);
 
   useEffect(() => {
     const fetchContent = async () => {
@@ -60,9 +60,19 @@ const Chat = ({ socket }) => {
         // console.log('channels on server: ', channels);
         setCurrUser(username);
         setCurrChannelId(currentChannelId);
+        console.log(data);
       } catch (err) {
-        // console.log(err);
-        setDataFetchError(true);
+        // setDataFetchError(true);
+        console.log('err: ', err);
+        toast.warn('Возникла ошибка с загрузкой данных. Обновите старинцу.', {
+          position: 'top-center',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       }
     };
 
@@ -106,6 +116,7 @@ const Chat = ({ socket }) => {
               {channels.map((channel) => (
                 <li className="nav-item w-100" key={channel.id}>
                   <ChatButton
+                    socket={socket}
                     channel={channel}
                     currChannelId={currChannelId}
                     setCurrChannelId={setCurrChannelId}
@@ -142,7 +153,9 @@ const Chat = ({ socket }) => {
       {renderModal({
         modalInfo, hideModal, setCurrChannelId, socket,
       })}
-      {dataFetchError ? <DataFetchErrorModal setDataFetchError={setDataFetchError} /> : null}
+      {/* {dataFetchError
+        ? <DataFetchErrorModal setDataFetchError={setDataFetchError} />
+        : null} */}
     </div>
   );
 };

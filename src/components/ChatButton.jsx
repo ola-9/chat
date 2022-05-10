@@ -1,16 +1,34 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button, Dropdown, ButtonGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { actions as channelsActions } from '../slices/channelsSlice.js';
 
 const ChatButton = ({
-  channel, currChannelId, setCurrChannelId, showModal,
+  socket, channel, currChannelId, setCurrChannelId, showModal,
 }) => {
   const { id, name, removable } = channel; // name.length=9
   const chatName = name.length <= 6 ? name : `${name.slice(0, 6)} ...`;
   const variant = id === currChannelId ? 'secondary' : '';
   const handleClick = (id === currChannelId) ? null : () => setCurrChannelId(id);
-
+  const dispatch = useDispatch();
   const { t } = useTranslation('translation', { keyPrefix: 'chat.channels' });
+
+  useEffect(() => {
+    socket.on('newChannel', (newChannel) => {
+      dispatch(channelsActions.addChannel(newChannel));
+    });
+    socket.on('removeChannel', (removedChannel) => {
+      setCurrChannelId(1);
+      dispatch(channelsActions.removeChannel(removedChannel.id));
+    });
+    socket.on('renameChannel', (renamedChannel) => {
+      dispatch(channelsActions.updateChannel({
+        id: renamedChannel.id,
+        changes: { ...renamedChannel, name: renamedChannel.name },
+      }));
+    });
+  }, [socket]);
 
   return (
     removable

@@ -1,14 +1,18 @@
 import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
 
-export const getChannelSchema = (data) => yup.object({
-  name: yup
-    .string()
-    .required()
-    .min(3)
-    .max(20)
-    .notOneOf(data),
-});
+export const getChannelSchema = (data) => {
+  const { t } = useTranslation('translation', { keyPrefix: 'chat.modals.add.errors' });
+
+  return yup.object({
+    name: yup
+      .string()
+      .required(t('required'))
+      .min(3, t('minMax'))
+      .max(20, t('minMax'))
+      .notOneOf(data, t('notUnique')),
+  });
+};
 
 export const getSignupSchema = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'signup' });
@@ -24,7 +28,7 @@ export const getSignupSchema = () => {
       password: yup
         .string()
         .required(t('card.form.errors.required'))
-        .min(6, t('card.form.errors.minMax')),
+        .min(6, t('card.form.errors.min')),
       passwordConfirmation: yup
         .string()
         .oneOf([yup.ref('password'), null], t('card.form.errors.passwordConfirmation')),

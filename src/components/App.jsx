@@ -11,9 +11,7 @@ import { Navbar, Container } from 'react-bootstrap';
 import { io } from 'socket.io-client';
 import { useTranslation } from 'react-i18next';
 import { ToastContainer } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
-// import 'react-toastify/dist/ReactToastify.min.css';
-import * as yup from 'yup';
+// import i18n from '../i18n.js';
 import Login from './Login.jsx';
 import NotFound from './NotFound.jsx';
 import AuthContext from '../contexts/index.jsx';
@@ -52,18 +50,18 @@ const PrivateRoute = ({ children }) => {
 const App = () => {
   const { t } = useTranslation();
 
-  yup.setLocale({
-    string: {
-      min: () => ({ key: 'errors.min' }),
-      minMax: () => ({ key: 'errors.max' }),
+  // yup.setLocale({
+  //   string: {
+  //     min: () => ({ key: 'errors.min' }),
+  //     minMax: () => ({ key: 'errors.max' }),
 
-    },
-    mixed: {
-      notOneOf: () => ({ key: 'errors.notUnique' }),
-      required: () => ({ key: 'errors.required' }),
-      oneOf: () => ({ key: 'errors.passConfirmation' }),
-    },
-  });
+  //   },
+  //   mixed: {
+  //     notOneOf: () => ({ key: 'errors.notUnique' }),
+  //     required: () => ({ key: 'errors.required' }),
+  //     oneOf: () => ({ key: 'errors.passConfirmation' }),
+  //   },
+  // });
 
   return (
     <AuthProvider>

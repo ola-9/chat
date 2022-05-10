@@ -4,30 +4,23 @@ import {
   Modal, Button, FormGroup, FormControl,
 } from 'react-bootstrap';
 import { useFormik } from 'formik';
-// import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { actions as channelsActions } from '../../slices/channelsSlice.js';
-import i18n from '../../i18n.js';
 import { getChannelSchema } from '../../yupSchema.js';
 
 const AddChannelModal = (props) => {
-  // console.log(props);
   const {
     onHide, socket, setCurrChannelId,
   } = props;
 
   const channels = useSelector((state) => Object.values(state.channelsReducer.entities));
   const channelNames = channels.map((channel) => channel.name);
-  // console.log('channelNames: ', channelNames);
 
   const [inputValid, setInputValid] = useState(true);
   const [validationError, setValidationError] = useState('');
 
   const inputRef = useRef();
-  useEffect(() => {
-    inputRef.current.focus();
-  }, []);
 
   const schema = getChannelSchema(channelNames);
 
@@ -40,15 +33,9 @@ const AddChannelModal = (props) => {
     onSubmit: (values) => {
       const validate = async (input) => {
         try {
-          // const result = await schema.validate(input); // {name: 'test2'}
-          // console.log('result: ', result);
           await schema.validate(input);
           socket.emit('newChannel', values, (data) => {
             console.log(data); // confirm if Ok
-          });
-          socket.on('newChannel', (channel) => {
-            setCurrChannelId(channel.id);
-            dispatch(channelsActions.addChannel(channel));
           });
           formik.resetForm();
           onHide();
@@ -62,8 +49,9 @@ const AddChannelModal = (props) => {
             progress: undefined,
           });
         } catch (err) {
-          const [message] = err.errors.map((error) => i18n.t(error.key));
-          // console.log('error messages: ', message);
+          // const [message] = err.errors.map((error) => i18n.t(error.key));
+          const [message] = err.errors;
+          // console.log('error messages: ', err.errors);
           setInputValid(false);
           setValidationError(message);
         }
@@ -71,6 +59,14 @@ const AddChannelModal = (props) => {
       validate(values);
     },
   });
+
+  useEffect(() => {
+    inputRef.current.focus();
+    socket.on('newChannel', (channel) => {
+      setCurrChannelId(channel.id);
+      dispatch(channelsActions.addChannel(channel));
+    });
+  }, [socket]);
 
   const { t } = useTranslation('translation', { keyPrefix: 'chat.modals.add' });
 
@@ -96,7 +92,7 @@ const AddChannelModal = (props) => {
               value={formik.values.name}
               name="name"
             />
-            {validationError ? <div className="text-danger">{t(validationError)}</div> : null}
+            {validationError ? <div className="text-danger">{validationError}</div> : null}
           </FormGroup>
           <div className="d-flex justify-content-end">
             <Button className="me-2" variant="secondary" onClick={onHide}>{t('cancelBtn')}</Button>

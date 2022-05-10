@@ -3,12 +3,12 @@ import { initReactI18next } from 'react-i18next';
 import resources from './locales/index.js';
 
 i18n
-  .use(initReactI18next) // passes i18n down to react-i18next
+  .use(initReactI18next)
   .init({
     resources,
     lng: 'ru',
-    // fallbackLng: 'en',
-    // debug: true,
+    fallbackLng: 'ru',
+    debug: true,
 
     interpolation: {
       escapeValue: false, // react already safes from xss

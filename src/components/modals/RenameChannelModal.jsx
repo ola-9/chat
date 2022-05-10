@@ -1,12 +1,12 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
   Button, Modal, FormGroup, FormControl, FormLabel,
 } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
-import i18n from '../../i18n.js';
-import { actions as channelsActions } from '../../slices/channelsSlice.js';
+// import i18n from '../../i18n.js';
+import { toast } from 'react-toastify';
 import { getChannelSchema } from '../../yupSchema.js';
 
 const RenameChannelModal = (props) => {
@@ -17,8 +17,6 @@ const RenameChannelModal = (props) => {
   useEffect(() => {
     inputRef.current.select();
   }, []);
-
-  const dispatch = useDispatch();
 
   const channels = useSelector((state) => Object.values(state.channelsReducer.entities));
   const channelNames = channels.map((item) => item.name);
@@ -34,32 +32,24 @@ const RenameChannelModal = (props) => {
       name: channel.name,
     },
     onSubmit: (values) => {
-      // socket.emit('renameChannel', { id: channel.id, name: values.name }, (data) => {
-      //   console.log(data);
-      // });
-      // socket.on('renameChannel', () => {
-      //   dispatch(channelsActions.updateChannel({
-      //     id: channel.id,
-      //     changes: { ...modalInfo, name: formik.values.name },
-      //   }));
-      // });
-      // onHide();
       const validate = async (input) => {
         try {
           await schema.validate(input);
           socket.emit('renameChannel', { id: channel.id, name: values.name }, (data) => {
             console.log(data);
           });
-          socket.on('renameChannel', () => {
-            dispatch(channelsActions.updateChannel({
-              id: channel.id,
-              changes: { ...modalInfo, name: formik.values.name },
-            }));
-          });
           onHide();
+          toast.success('Канал переименован', {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
         } catch (err) {
-          const [message] = err.errors.map((error) => i18n.t(error.key));
-          // console.log('error messages: ', message);
+          const [message] = err.errors;
           setInputValid(false);
           setValidationError(message);
         }
@@ -98,7 +88,7 @@ const RenameChannelModal = (props) => {
               name="name"
               id="name"
             />
-            {validationError ? <div className="text-danger">{t(validationError)}</div> : null}
+            {validationError ? <div className="text-danger">{validationError}</div> : null}
             <div className="d-flex justify-content-end">
               <Button className="me-2" variant="secondary" onClick={onHide}>{t('cancelBtn')}</Button>
               <Button type="submit" variant="primary">{t('submitBtn')}</Button>

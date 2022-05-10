@@ -1,23 +1,28 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+// import { useDispatch } from 'react-redux';
 import { Modal, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { actions as channelsActions } from '../../slices/channelsSlice.js';
+import { toast } from 'react-toastify';
 
 const RemoveChannelModal = (props) => {
   const { onHide, modalInfo, socket } = props;
   const { channel } = modalInfo;
-  const dispatch = useDispatch();
 
   const handleRemove = () => {
-    console.log('remove channel');
+    // console.log('remove channel');
     socket.emit('removeChannel', { id: channel.id }, (data) => {
       console.log(data);
     });
-    socket.on('removeChannel', () => {
-      dispatch(channelsActions.removeChannel(channel.id));
-    });
     onHide();
+    toast.success('Канал удален', {
+      position: 'top-right',
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
   };
 
   const { t } = useTranslation('translation', { keyPrefix: 'chat.modals.remove' });

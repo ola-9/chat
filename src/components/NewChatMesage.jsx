@@ -9,9 +9,9 @@ const NewChatMesage = ({ socket, currChannelId, username }) => {
   const dispatch = useDispatch();
   const inputRef = useRef();
 
-  useEffect(() => {
-    inputRef.current.select();
-  }, []);
+  // useEffect(() => {
+  //   inputRef.current.select();
+  // }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -28,19 +28,16 @@ const NewChatMesage = ({ socket, currChannelId, username }) => {
       socket.emit('newMessage', newMessage, (data) => {
         console.log(data);
       });
-      socket.on('newMessage', (message) => {
-        dispatch(actions.addMessage(message));
-      });
     },
   });
 
-  // useEffect(() => {
-  // inputRef.current.focus();
-  // socket.on('newMessage', (message) => {
-  //   // console.log('message inside useEffect: ', message);
-  //   dispatch(actions.addMessage(message));
-  // });
-  // }, [socket]);
+  useEffect(() => {
+    inputRef.current.focus();
+    socket.on('newMessage', (message) => {
+      // console.log('message inside useEffect: ', message);
+      dispatch(actions.addMessage(message));
+    });
+  }, [socket]);
 
   const { t } = useTranslation();
 
