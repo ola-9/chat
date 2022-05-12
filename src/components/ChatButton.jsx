@@ -8,7 +8,7 @@ const ChatButton = ({
   socket, channel, currChannelId, setCurrChannelId, showModal,
 }) => {
   const { id, name, removable } = channel; // name.length=9
-  const chatName = name.length <= 6 ? name : `${name.slice(0, 6)} ...`;
+  // const chatName = name.length <= 6 ? name : `${name.slice(0, 6)} ...`;
   const variant = id === currChannelId ? 'secondary' : '';
   const handleClick = (id === currChannelId) ? null : () => setCurrChannelId(id);
   const dispatch = useDispatch();
@@ -45,7 +45,8 @@ const ChatButton = ({
             onClick={handleClick}
           >
             <span className="me-1">#</span>
-            {chatName}
+            {/* {chatName} */}
+            {name}
           </Button>
           <Dropdown.Toggle split variant={variant} id="dropdown-split-basic" className="flex-grow-0">
             <span className="visually-hidden">{t('manageChannelBtn')}</span>
