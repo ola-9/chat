@@ -12,7 +12,11 @@ import store from './slices/index.js';
 
 const rollbarConfig = {
   accessToken: 'cbc76f9cbb72450bbc155fc59816ed3c',
-  environment: 'production',
+  captureUncaught: true,
+  captureUnhandledRejections: true,
+  payload: {
+    environment: 'production',
+  },
 };
 
 const rollbar = new Rollbar(rollbarConfig);
@@ -22,7 +26,7 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <I18nextProvider i18n={i18n}>
-        <RProvider config={rollbar}>
+        <RProvider config={rollbarConfig} instance={rollbar}>
           <ErrorBoundary>
             <App />
           </ErrorBoundary>

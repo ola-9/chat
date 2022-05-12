@@ -8,11 +8,13 @@ import * as yup from 'yup';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useRollbar } from '@rollbar/react';
 import useAuth from '../hooks/index.jsx';
 import routes from '../routes.js';
 import loginImage from '../../assets/login.png';
 
 const Login = (props) => {
+  const rollbar = useRollbar();
   const auth = useAuth();
   const [authFailed, setAuthFailed] = useState(false);
   const location = useLocation();
@@ -20,6 +22,7 @@ const Login = (props) => {
   const { state } = props;
 
   const onSubmit = async (values) => {
+    rollbar.error('TestError: Hello word');
     setAuthFailed(false);
 
     try {
