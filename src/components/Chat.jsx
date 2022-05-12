@@ -63,7 +63,7 @@ const Chat = ({ socket }) => {
         // console.log(data);
       } catch (err) {
         // setDataFetchError(true);
-        console.log('err: ', err);
+        // console.log('err: ', err);
         toast.warn('Возникла ошибка с загрузкой данных. Обновите старинцу.', {
           position: 'top-center',
           autoClose: 5000,
