@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
-  Modal, Button, FormGroup, FormControl,
+  Modal, Button, FormGroup, FormControl, FormLabel,
 } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
@@ -83,6 +83,12 @@ const AddChannelModal = (props) => {
       <Modal.Body>
         <form onSubmit={formik.handleSubmit}>
           <FormGroup>
+            <FormLabel
+              htmlFor="name"
+              className="visually-hidden"
+            >
+              {t('inputLabel')}
+            </FormLabel>
             <FormControl
               className={inputValid ? 'mb-2' : 'mb-2 is-invalid'}
               // required

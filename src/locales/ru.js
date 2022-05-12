@@ -26,6 +26,7 @@ export default {
           title: 'Добавить канал',
           cancelBtn: 'Отменить',
           submitBtn: 'Отправить',
+          inputLabel: 'Имя канала',
           errors: {
             notUnique: 'Должно быть уникальным',
             required: 'Обязательное поле',
