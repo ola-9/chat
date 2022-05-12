@@ -16,9 +16,14 @@ const ChatButton = ({
 
   useEffect(() => {
     socket.on('newChannel', (newChannel) => {
+      // setCurrChannelId(newChannel.id);
       dispatch(channelsActions.addChannel(newChannel));
     });
     socket.on('removeChannel', (removedChannel) => {
+      // console.log('removedChannel.id: ', removedChannel.id);
+      // console.log('currChannelId: ', currChannelId);
+      // const channelIdToBe = currChannelId === removedChannel.id ? 1 : currChannelId;
+      // setCurrChannelId(channelIdToBe);
       setCurrChannelId(1);
       dispatch(channelsActions.removeChannel(removedChannel.id));
     });

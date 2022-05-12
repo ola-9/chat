@@ -60,7 +60,7 @@ const Chat = ({ socket }) => {
         // console.log('channels on server: ', channels);
         setCurrUser(username);
         setCurrChannelId(currentChannelId);
-        console.log(data);
+        // console.log(data);
       } catch (err) {
         // setDataFetchError(true);
         console.log('err: ', err);

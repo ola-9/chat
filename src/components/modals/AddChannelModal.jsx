@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
   Modal, Button, FormGroup, FormControl,
 } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { actions as channelsActions } from '../../slices/channelsSlice.js';
+// import { actions as channelsActions } from '../../slices/channelsSlice.js';
 import { getChannelSchema } from '../../yupSchema.js';
 
 const AddChannelModal = (props) => {
@@ -24,7 +24,7 @@ const AddChannelModal = (props) => {
 
   const schema = getChannelSchema(channelNames);
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -64,7 +64,7 @@ const AddChannelModal = (props) => {
     inputRef.current.focus();
     socket.on('newChannel', (channel) => {
       setCurrChannelId(channel.id);
-      dispatch(channelsActions.addChannel(channel));
+      // dispatch(channelsActions.addChannel(channel));
     });
   }, [socket]);
 
