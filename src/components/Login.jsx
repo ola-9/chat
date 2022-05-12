@@ -3,18 +3,18 @@ import React, { useState } from 'react';
 import {
   Card, Button, Form, Container,
 } from 'react-bootstrap';
-import { Formik, Field, ErrorMessage } from 'formik';
-import * as yup from 'yup';
+import { Formik, Field } from 'formik';
+// import * as yup from 'yup';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useRollbar } from '@rollbar/react';
+// import { useRollbar } from '@rollbar/react';
 import useAuth from '../hooks/index.jsx';
 import routes from '../routes.js';
 import loginImage from '../../assets/login.png';
 
 const Login = (props) => {
-  const rollbar = useRollbar();
+  // const rollbar = useRollbar();
   const auth = useAuth();
   const [authFailed, setAuthFailed] = useState(false);
   const location = useLocation();
@@ -22,7 +22,7 @@ const Login = (props) => {
   const { state } = props;
 
   const onSubmit = async (values) => {
-    rollbar.error('TestError: Hello word');
+    // rollbar.error('TestError: Hello word');
     setAuthFailed(false);
 
     try {
@@ -58,12 +58,12 @@ const Login = (props) => {
               </div>
               <Formik
                 initialValues={{ username: '', password: '' }}
-                validationSchema={
-                  yup.object({
-                    username: yup.string().required(t('card.form.errors.validation')),
-                    password: yup.string().required(t('card.form.errors.validation')),
-                  })
-                }
+                // validationSchema={
+                //   yup.object({
+                //     username: yup.string().required(t('card.form.errors.validation')),
+                //     password: yup.string().required(t('card.form.errors.validation')),
+                //   })
+                // }
                 onSubmit={onSubmit}
               >
                 {({ errors, touched, handleSubmit }) => (
@@ -84,9 +84,9 @@ const Login = (props) => {
                         autoFocus
                       />
                       <label htmlFor="username">{t('card.form.username.label')}</label>
-                      <ErrorMessage name="username">
+                      {/* <ErrorMessage name="username">
                         {(msg) => <div className="text-danger fw-lighter fs-6">{msg}</div>}
-                      </ErrorMessage>
+                      </ErrorMessage> */}
                     </div>
                     <div className="form-floating mb-4 position-relative">
                       <Field
@@ -99,9 +99,9 @@ const Login = (props) => {
                         placeholder={t('card.form.password.placeholder')}
                       />
                       <label htmlFor="password">{t('card.form.password.label')}</label>
-                      <ErrorMessage name="password">
+                      {/* <ErrorMessage name="password">
                         {(msg) => <div className="text-danger fw-lighter fs-6">{msg}</div>}
-                      </ErrorMessage>
+                      </ErrorMessage> */}
                       {authFailed && (
                         <Form.Control.Feedback type="invalid" tooltip>
                           {t('card.form.errors.auth')}
