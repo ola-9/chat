@@ -8,7 +8,7 @@ import {
   NavLink,
 } from 'react-router-dom';
 import { Navbar, Container } from 'react-bootstrap';
-import { io } from 'socket.io-client';
+// import { io } from 'socket.io-client';
 import { useTranslation } from 'react-i18next';
 import { ToastContainer } from 'react-toastify';
 import Login from './Login.jsx';
@@ -19,7 +19,7 @@ import LogOutBtn from './LogOutBtn.jsx';
 import useAuth from '../hooks/index.jsx';
 import Signup from './Signup.jsx';
 
-const socket = io();
+// const socket = io();
 
 const AuthProvider = ({ children }) => {
   const userId = JSON.parse(localStorage.getItem('userId'));
@@ -46,7 +46,7 @@ const PrivateRoute = ({ children }) => {
   );
 };
 
-const App = () => {
+const App = ({ socket }) => {
   const { t } = useTranslation();
 
   return (
