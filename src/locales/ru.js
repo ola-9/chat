@@ -14,6 +14,7 @@ export default {
       messages: {
         sendMessageBtn: 'Отправить',
         inputPlaceholder: 'Введите сообщение...',
+        inputLabel: 'Новое сообщение',
         сounter: {
           count_one: '{{count}} сообщение',
           count_few: '{{count}} сообщения',

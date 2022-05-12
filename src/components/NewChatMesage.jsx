@@ -45,6 +45,12 @@ const NewChatMesage = ({ socket, currChannelId, username }) => {
     <div className="mt-auto px-5 py-3">
       <Form onSubmit={formik.handleSubmit}>
         <Form.Group className="d-flex">
+          <Form.Label
+            htmlFor="text"
+            className="visually-hidden"
+          >
+            {t('chat.messages.inputLabel')}
+          </Form.Label>
           <Form.Control
             className="me-2"
             onChange={formik.handleChange}
