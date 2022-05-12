@@ -6,7 +6,7 @@ import {
 import { Formik, Field } from 'formik';
 // import * as yup from 'yup';
 import axios from 'axios';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 // import { useRollbar } from '@rollbar/react';
 import useAuth from '../hooks/index.jsx';
@@ -119,9 +119,9 @@ const Login = (props) => {
                   {t('card.footer.question')}
                   &nbsp;
                 </span>
-                <a href="/signup">
+                <Link to="/signup">
                   {t('card.footer.signup')}
-                </a>
+                </Link>
               </div>
             </Card.Footer>
           </Card>
