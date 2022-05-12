@@ -1,7 +1,7 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { io } from 'socket.io-client';
-import { Provider } from '@rollbar/react';
+// import { Provider } from '@rollbar/react';
 import Rollbar from 'rollbar';
 import resources from './locales/index.js';
 import store from './slices/index.js';
