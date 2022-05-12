@@ -97,6 +97,7 @@ const AddChannelModal = (props) => {
               onBlur={formik.handleBlur}
               value={formik.values.name}
               name="name"
+              id="name"
             />
             {validationError ? <div className="text-danger">{validationError}</div> : null}
           </FormGroup>
