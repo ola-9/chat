@@ -14,7 +14,7 @@ const RemoveChannelModal = (props) => {
       console.log(data);
     });
     onHide();
-    toast.success('Канал удален', {
+    toast.success('Канал удалён', {
       position: 'top-right',
       autoClose: 5000,
       hideProgressBar: false,
