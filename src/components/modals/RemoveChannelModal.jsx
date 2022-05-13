@@ -1,5 +1,4 @@
 import React from 'react';
-// import { useDispatch } from 'react-redux';
 import { Modal, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
@@ -9,7 +8,6 @@ const RemoveChannelModal = (props) => {
   const { channel } = modalInfo;
 
   const handleRemove = () => {
-    // console.log('remove channel');
     socket.emit('removeChannel', { id: channel.id }, (data) => {
       console.log(data);
     });

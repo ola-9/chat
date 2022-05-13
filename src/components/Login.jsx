@@ -4,7 +4,6 @@ import {
   Card, Button, Form, Container,
 } from 'react-bootstrap';
 import { Formik, Field } from 'formik';
-// import * as yup from 'yup';
 import axios from 'axios';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -44,7 +43,6 @@ const Login = (props) => {
 
   return (
     <Container fluid className="h-100">
-      {/* <Navigation /> */}
       <div className="row justify-content-center align-content-center h-100">
         <div className="col-12 col-md-8 col-xxl-6">
           <Card className="shadow-sm">

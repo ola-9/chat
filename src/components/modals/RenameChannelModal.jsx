@@ -5,10 +5,8 @@ import {
 } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
-// import i18n from '../../i18n.js';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
-// import { getChannelSchema } from '../../yupSchema.js';
 
 const RenameChannelModal = (props) => {
   const { onHide, modalInfo, socket } = props;
@@ -21,7 +19,6 @@ const RenameChannelModal = (props) => {
 
   const channels = useSelector((state) => Object.values(state.channelsReducer.entities));
   const channelsNames = channels.map((item) => item.name);
-  // console.log('channelsNames: ', channelsNames);
 
   const [inputValid, setInputValid] = useState(true);
   const [validationError, setValidationError] = useState('');

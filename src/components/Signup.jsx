@@ -9,7 +9,6 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import SignupImage from '../../assets/signup.png';
-// import { getSignupSchema } from '../yupSchema.js';
 import routes from '../routes.js';
 import useAuth from '../hooks/index.jsx';
 
@@ -38,19 +37,16 @@ const Signup = () => {
     });
 
   const onSubmit = async (values) => {
-    // console.log('click on submit: ', values);
     try {
       const res = await axios
         .post(
           routes.signupPath(),
           { username: values.username, password: values.password },
         );
-      // console.log(res);
       localStorage.setItem('userId', JSON.stringify(res.data));
       auth.logIn();
       navigate('/', { replace: true });
     } catch (err) {
-      // console.log('err: ', err.response.status);
       if (err.isAxiosError && err.response.status === 409) {
         setSignUpFailed(true);
         return;

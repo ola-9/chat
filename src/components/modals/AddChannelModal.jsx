@@ -8,9 +8,6 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
 
-// import { actions as channelsActions } from '../../slices/channelsSlice.js';
-import { getChannelSchema } from '../../yupSchema.js';
-
 const AddChannelModal = (props) => {
   const {
     onHide, socket, setCurrChannelId,
@@ -26,7 +23,6 @@ const AddChannelModal = (props) => {
 
   const { t } = useTranslation('translation', { keyPrefix: 'chat.modals.add' });
 
-  // const schema = getChannelSchema(channelNames);
   const schema = yup.object({
     name: yup
       .string()
@@ -36,7 +32,6 @@ const AddChannelModal = (props) => {
       .notOneOf(channelsNames, t('notUnique')),
   });
 
-  // const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -61,9 +56,7 @@ const AddChannelModal = (props) => {
             progress: undefined,
           });
         } catch (err) {
-          // const [message] = err.errors.map((error) => i18n.t(error.key));
           const [message] = err.errors;
-          // console.log('error messages: ', err.errors);
           setInputValid(false);
           setValidationError(message);
         }

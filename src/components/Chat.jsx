@@ -57,10 +57,8 @@ const Chat = ({ socket }) => {
         const { channels, currentChannelId, messages } = data;
         dispatch(channelsActions.addChannels(channels));
         dispatch(messagesActions.addMessages(messages));
-        // console.log('channels on server: ', channels);
         setCurrUser(username);
         setCurrChannelId(currentChannelId);
-        // console.log(data);
       } catch (err) {
         // setDataFetchError(true);
         // console.log('err: ', err);
@@ -81,17 +79,13 @@ const Chat = ({ socket }) => {
 
   const channels = useSelector((state) => Object.values(state.channelsReducer.entities));
   const currChannel = channels.find((channel) => channel.id === currChannelId) ?? '';
-  // console.log('channels in store Chat: ', channels);
 
   const messages = useSelector((state) => Object.values(state.messagesReducer.entities));
-  // console.log('messages: ', messages);
   const currChannelMessages = messages.filter((message) => message.channelId === currChannelId);
-  // console.log('currChannelMessages: ', currChannelMessages);
 
   const [modalInfo, setModalInfo] = useState({ type: null, channel: null });
   const hideModal = () => setModalInfo({ type: null, channel: null });
   const showModal = (type, channel = null) => setModalInfo({ type, channel });
-  // console.log('modalInfo: ', modalInfo);
 
   const { t } = useTranslation('translation', { keyPrefix: 'chat' });
 

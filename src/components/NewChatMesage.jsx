@@ -34,7 +34,6 @@ const NewChatMesage = ({ socket, currChannelId, username }) => {
   useEffect(() => {
     inputRef.current.focus();
     socket.on('newMessage', (message) => {
-      // console.log('message inside useEffect: ', message);
       dispatch(actions.addMessage(message));
     });
   }, [socket]);
