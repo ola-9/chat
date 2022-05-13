@@ -7,8 +7,9 @@ import { Formik, Field, ErrorMessage } from 'formik';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import * as yup from 'yup';
 import SignupImage from '../../assets/signup.png';
-import { getSignupSchema } from '../yupSchema.js';
+// import { getSignupSchema } from '../yupSchema.js';
 import routes from '../routes.js';
 import useAuth from '../hooks/index.jsx';
 
@@ -16,7 +17,25 @@ const Signup = () => {
   const [signUpFailed, setSignUpFailed] = useState(false);
   const auth = useAuth();
   const navigate = useNavigate();
-  const schema = getSignupSchema();
+
+  const { t } = useTranslation('translation', { keyPrefix: 'signup' });
+
+  const schema = yup
+    .object()
+    .shape({
+      username: yup
+        .string()
+        .required(t('card.form.errors.required'))
+        .min(3, t('card.form.errors.minMax'))
+        .max(20, t('card.form.errors.minMax')),
+      password: yup
+        .string()
+        .required(t('card.form.errors.required'))
+        .min(6, t('card.form.errors.min')),
+      passwordConfirmation: yup
+        .string()
+        .oneOf([yup.ref('password'), null], t('card.form.errors.passwordConfirmation')),
+    });
 
   const onSubmit = async (values) => {
     // console.log('click on submit: ', values);
@@ -39,8 +58,6 @@ const Signup = () => {
       throw err;
     }
   };
-
-  const { t } = useTranslation('translation', { keyPrefix: 'signup' });
 
   return (
     <Container fluid className="h-100">

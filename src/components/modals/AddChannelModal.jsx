@@ -6,6 +6,8 @@ import {
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import * as yup from 'yup';
+
 // import { actions as channelsActions } from '../../slices/channelsSlice.js';
 import { getChannelSchema } from '../../yupSchema.js';
 
@@ -15,14 +17,24 @@ const AddChannelModal = (props) => {
   } = props;
 
   const channels = useSelector((state) => Object.values(state.channelsReducer.entities));
-  const channelNames = channels.map((channel) => channel.name);
+  const channelsNames = channels.map((channel) => channel.name);
 
   const [inputValid, setInputValid] = useState(true);
   const [validationError, setValidationError] = useState('');
 
   const inputRef = useRef();
 
-  const schema = getChannelSchema(channelNames);
+  const { t } = useTranslation('translation', { keyPrefix: 'chat.modals.add' });
+
+  // const schema = getChannelSchema(channelNames);
+  const schema = yup.object({
+    name: yup
+      .string()
+      .required(t('required'))
+      .min(3, t('minMax'))
+      .max(20, t('minMax'))
+      .notOneOf(channelsNames, t('notUnique')),
+  });
 
   // const dispatch = useDispatch();
   const formik = useFormik({
@@ -67,8 +79,6 @@ const AddChannelModal = (props) => {
       // dispatch(channelsActions.addChannel(channel));
     });
   }, [socket]);
-
-  const { t } = useTranslation('translation', { keyPrefix: 'chat.modals.add' });
 
   return (
     <Modal

@@ -7,7 +7,8 @@ import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 // import i18n from '../../i18n.js';
 import { toast } from 'react-toastify';
-import { getChannelSchema } from '../../yupSchema.js';
+import * as yup from 'yup';
+// import { getChannelSchema } from '../../yupSchema.js';
 
 const RenameChannelModal = (props) => {
   const { onHide, modalInfo, socket } = props;
@@ -19,13 +20,22 @@ const RenameChannelModal = (props) => {
   }, []);
 
   const channels = useSelector((state) => Object.values(state.channelsReducer.entities));
-  const channelNames = channels.map((item) => item.name);
-  console.log('channelNames: ', channelNames);
+  const channelsNames = channels.map((item) => item.name);
+  // console.log('channelsNames: ', channelsNames);
 
   const [inputValid, setInputValid] = useState(true);
   const [validationError, setValidationError] = useState('');
 
-  const schema = getChannelSchema(channelNames);
+  const { t } = useTranslation('translation', { keyPrefix: 'chat.modals.rename' });
+
+  const schema = yup.object({
+    name: yup
+      .string()
+      .required(t('required'))
+      .min(3, t('minMax'))
+      .max(20, t('minMax'))
+      .notOneOf(channelsNames, t('notUnique')),
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -57,8 +67,6 @@ const RenameChannelModal = (props) => {
       validate(values);
     },
   });
-
-  const { t } = useTranslation('translation', { keyPrefix: 'chat.modals.rename' });
 
   return (
     <Modal
