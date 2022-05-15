@@ -1,35 +1,43 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Button, Dropdown, ButtonGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { actions as channelsActions } from '../slices/channelsSlice.js';
+import { actions as currChannelActions } from '../slices/currChannelSlice.js';
+import { actions as messagesActions } from '../slices/messagesSlice.js';
 
 const ChatButton = ({
-  socket, channel, currChannelId, setCurrChannelId, showModal,
+  socket, channel, showModal, handleClick,
 }) => {
-  const { id, name, removable } = channel; // name.length=9
-  // const chatName = name.length <= 6 ? name : `${name.slice(0, 6)} ...`;
-  const variant = id === currChannelId ? 'secondary' : '';
-  const handleClick = (id === currChannelId) ? null : () => setCurrChannelId(id);
+  const { id, name, removable } = channel;
+  const [currChannel] = useSelector((state) => Object.values(state.currChannelReducer.entities));
+  const variant = id === currChannel.id ? 'secondary' : '';
   const dispatch = useDispatch();
+
   const { t } = useTranslation('translation', { keyPrefix: 'chat.channels' });
 
-  useEffect(() => {
-    socket.on('newChannel', (newChannel) => {
-      // setCurrChannelId(newChannel.id);
-      dispatch(channelsActions.addChannel(newChannel));
-    });
-    socket.on('removeChannel', (removedChannel) => {
-      setCurrChannelId(1);
-      dispatch(channelsActions.removeChannel(removedChannel.id));
-    });
-    socket.on('renameChannel', (renamedChannel) => {
-      dispatch(channelsActions.updateChannel({
-        id: renamedChannel.id,
-        changes: { ...renamedChannel, name: renamedChannel.name },
+  socket.on('newMessage', (message) => {
+    dispatch(messagesActions.addMessage(message));
+  });
+
+  socket.on('newChannel', (newChannel) => {
+    dispatch(channelsActions.addChannel(newChannel));
+  });
+  socket.on('removeChannel', (removedChannel) => {
+    if (removedChannel.id === currChannel.id) {
+      dispatch(currChannelActions.updateCurrChannel({
+        id: currChannel.id,
+        changes: { id: 1, name: 'general', removable: false },
       }));
-    });
-  }, [socket]);
+    }
+    dispatch(channelsActions.removeChannel(removedChannel.id));
+  });
+  socket.on('renameChannel', (renamedChannel) => {
+    dispatch(channelsActions.updateChannel({
+      id: renamedChannel.id,
+      changes: { ...renamedChannel, name: renamedChannel.name },
+    }));
+  });
 
   return (
     removable
@@ -38,10 +46,9 @@ const ChatButton = ({
           <Button
             variant={variant}
             className="w-100 rounded-0 text-start text-truncate"
-            onClick={handleClick}
+            onClick={() => handleClick(channel)}
           >
             <span className="me-1">#</span>
-            {/* {chatName} */}
             {name}
           </Button>
           <Dropdown.Toggle split variant={variant} id="dropdown-split-basic" className="flex-grow-0">
@@ -58,7 +65,7 @@ const ChatButton = ({
         <Button
           variant={variant}
           className="w-100 rounded-0 text-start"
-          onClick={handleClick}
+          onClick={() => handleClick(channel)}
         >
           <span className="me-1">#</span>
           {name}

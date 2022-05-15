@@ -8,6 +8,7 @@ import routes from '../routes.js';
 import ChatButton from './ChatButton.jsx';
 import { actions as channelsActions } from '../slices/channelsSlice.js';
 import { actions as messagesActions } from '../slices/messagesSlice.js';
+import { actions as currChannelActions } from '../slices/currChannelSlice.js';
 import NewChatMessage from './NewChatMesage.jsx';
 import ChatMessage from './ChatMessage.jsx';
 import getModal from './modals/index.jsx';
@@ -24,7 +25,7 @@ const getAuthHeader = () => {
 };
 
 const renderModal = ({
-  modalInfo, hideModal, setCurrChannelId, socket,
+  modalInfo, hideModal, socket,
 }) => {
   if (!modalInfo.type) {
     return null;
@@ -35,30 +36,32 @@ const renderModal = ({
   return (
     <Component
       modalInfo={modalInfo}
-      setCurrChannelId={setCurrChannelId}
       socket={socket}
       onHide={hideModal}
     />
   );
 };
 
+const defaultChannel = { id: 1, name: 'general', removable: false };
+
 const Chat = ({ socket }) => {
   const dispatch = useDispatch();
   const { username } = JSON.parse(localStorage.getItem('userId'));
-  const [currChannelId, setCurrChannelId] = useState(null);
+  // const [currChannelId, setCurrChannelId] = useState(null);
   const [currUser, setCurrUser] = useState('');
 
   // const [dataFetchError, setDataFetchError] = useState(false);
-
+  // console.log('currChannelId: ', currChannelId);
   useEffect(() => {
     const fetchContent = async () => {
       try {
         const { data } = await axios.get(routes.dataPath(), { headers: getAuthHeader() });
-        const { channels, currentChannelId, messages } = data;
+        const { channels, messages } = data;
         dispatch(channelsActions.addChannels(channels));
         dispatch(messagesActions.addMessages(messages));
         setCurrUser(username);
-        setCurrChannelId(currentChannelId);
+        // setCurrChannelId(currentChannelId);
+        dispatch(currChannelActions.setCurrChannel(defaultChannel));
       } catch (err) {
         // setDataFetchError(true);
         // console.log('err: ', err);
@@ -78,10 +81,17 @@ const Chat = ({ socket }) => {
   }, []);
 
   const channels = useSelector((state) => Object.values(state.channelsReducer.entities));
-  const currChannel = channels.find((channel) => channel.id === currChannelId) ?? '';
+  const [currChannel] = useSelector((state) => Object.values(state.currChannelReducer.entities));
+
+  const handleClick = (channel) => {
+    dispatch(currChannelActions.updateCurrChannel({
+      id: currChannel.id,
+      changes: channel,
+    }));
+  };
 
   const messages = useSelector((state) => Object.values(state.messagesReducer.entities));
-  const currChannelMessages = messages.filter((message) => message.channelId === currChannelId);
+  const currChannelMessages = messages.filter((message) => message.channelId === currChannel.id);
 
   const [modalInfo, setModalInfo] = useState({ type: null, channel: null });
   const hideModal = () => setModalInfo({ type: null, channel: null });
@@ -112,8 +122,7 @@ const Chat = ({ socket }) => {
                   <ChatButton
                     socket={socket}
                     channel={channel}
-                    currChannelId={currChannelId}
-                    setCurrChannelId={setCurrChannelId}
+                    handleClick={handleClick}
                     showModal={showModal}
                   />
                 </li>
@@ -126,7 +135,7 @@ const Chat = ({ socket }) => {
                 <p className="m-0">
                   <b>
                     #&nbsp;
-                    {currChannel.name}
+                    {currChannel ? currChannel.name : ''}
                   </b>
                 </p>
                 <span className="text-muted">
@@ -139,13 +148,13 @@ const Chat = ({ socket }) => {
                   message={message}
                 />
               ))}
-              <NewChatMessage socket={socket} currChannelId={currChannelId} username={currUser} />
+              <NewChatMessage socket={socket} currChannelId={currChannel ? currChannel.id : ''} username={currUser} />
             </div>
           </Col>
         </Row>
       </Container>
       {renderModal({
-        modalInfo, hideModal, setCurrChannelId, socket,
+        modalInfo, hideModal, socket,
       })}
       {/* {dataFetchError
         ? <DataFetchErrorModal setDataFetchError={setDataFetchError} />

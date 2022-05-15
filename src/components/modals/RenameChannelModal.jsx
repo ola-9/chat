@@ -24,14 +24,13 @@ const RenameChannelModal = (props) => {
   const [validationError, setValidationError] = useState('');
 
   const { t } = useTranslation('translation', { keyPrefix: 'chat.modals.rename' });
-
   const schema = yup.object({
     name: yup
       .string()
-      .required(t('required'))
-      .min(3, t('minMax'))
-      .max(20, t('minMax'))
-      .notOneOf(channelsNames, t('notUnique')),
+      .required(t('errors.required'))
+      .min(3, t('errors.minMax'))
+      .max(20, t('errors.minMax'))
+      .notOneOf(channelsNames, t('errors.notUnique')),
   });
 
   const formik = useFormik({

@@ -1,23 +1,21 @@
 import React, { useEffect, useRef } from 'react';
-import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import { Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { actions } from '../slices/messagesSlice.js';
 
 const NewChatMesage = ({ socket, currChannelId, username }) => {
-  const dispatch = useDispatch();
   const inputRef = useRef();
 
-  // useEffect(() => {
-  //   inputRef.current.select();
-  // }, []);
+  useEffect(() => {
+    inputRef.current.select();
+  }, []);
 
   const formik = useFormik({
     initialValues: {
       text: '',
     },
     onSubmit: (values) => {
+      console.log('values!!!', values);
       formik.resetForm();
       const newMessage = {
         text: values.text,
@@ -30,13 +28,6 @@ const NewChatMesage = ({ socket, currChannelId, username }) => {
       });
     },
   });
-
-  useEffect(() => {
-    inputRef.current.focus();
-    socket.on('newMessage', (message) => {
-      dispatch(actions.addMessage(message));
-    });
-  }, [socket]);
 
   const { t } = useTranslation();
 

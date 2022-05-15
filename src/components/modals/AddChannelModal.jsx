@@ -10,7 +10,7 @@ import * as yup from 'yup';
 
 const AddChannelModal = (props) => {
   const {
-    onHide, socket, setCurrChannelId,
+    onHide, socket,
   } = props;
 
   const channels = useSelector((state) => Object.values(state.channelsReducer.entities));
@@ -23,13 +23,15 @@ const AddChannelModal = (props) => {
 
   const { t } = useTranslation('translation', { keyPrefix: 'chat.modals.add' });
 
+  // const dispatch = useDispatch();
+
   const schema = yup.object({
     name: yup
       .string()
-      .required(t('required'))
-      .min(3, t('minMax'))
-      .max(20, t('minMax'))
-      .notOneOf(channelsNames, t('notUnique')),
+      .required(t('errors.required'))
+      .min(3, t('errors.minMax'))
+      .max(20, t('errors.minMax'))
+      .notOneOf(channelsNames, t('errors.notUnique')),
   });
 
   const formik = useFormik({
@@ -42,7 +44,7 @@ const AddChannelModal = (props) => {
         try {
           await schema.validate(input);
           socket.emit('newChannel', values, (data) => {
-            console.log(data); // confirm if Ok
+            console.log('data: ', data); // confirm if Ok
           });
           formik.resetForm();
           onHide();
@@ -67,11 +69,7 @@ const AddChannelModal = (props) => {
 
   useEffect(() => {
     inputRef.current.focus();
-    socket.on('newChannel', (channel) => {
-      setCurrChannelId(channel.id);
-      // dispatch(channelsActions.addChannel(channel));
-    });
-  }, [socket]);
+  }, []);
 
   return (
     <Modal
