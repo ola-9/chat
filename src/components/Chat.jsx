@@ -12,17 +12,8 @@ import { actions as currChannelActions } from '../slices/currChannelSlice.js';
 import NewChatMessage from './NewChatMesage.jsx';
 import ChatMessage from './ChatMessage.jsx';
 import getModal from './modals/index.jsx';
+import useAuth from '../hooks/useAuth.jsx';
 // import DataFetchErrorModal from './DataFetchErrorModal.jsx';
-
-const getAuthHeader = () => {
-  const userId = JSON.parse(localStorage.getItem('userId'));
-
-  if (userId && userId.token) {
-    return { Authorization: `Bearer ${userId.token}` };
-  }
-
-  return {};
-};
 
 const renderModal = ({
   modalInfo, hideModal, socket,
@@ -42,30 +33,28 @@ const renderModal = ({
   );
 };
 
-const defaultChannel = { id: 1, name: 'general', removable: false };
-
 const Chat = ({ socket }) => {
+  const auth = useAuth();
   const dispatch = useDispatch();
-  const { username } = JSON.parse(localStorage.getItem('userId'));
-  // const [currChannelId, setCurrChannelId] = useState(null);
-  const [currUser, setCurrUser] = useState('');
 
+  const [currUser, setCurrUser] = useState('');
+  const { t } = useTranslation('translation', { keyPrefix: 'chat' });
   // const [dataFetchError, setDataFetchError] = useState(false);
-  // console.log('currChannelId: ', currChannelId);
+
   useEffect(() => {
     const fetchContent = async () => {
       try {
-        const { data } = await axios.get(routes.dataPath(), { headers: getAuthHeader() });
-        const { channels, messages } = data;
+        const { data } = await axios.get(routes.dataPath(), { headers: auth.getAuthHeader() });
+        const { channels, messages, currentChannelId } = data;
+        const currChannel = channels.find((channel) => channel.id === currentChannelId);
         dispatch(channelsActions.addChannels(channels));
         dispatch(messagesActions.addMessages(messages));
-        setCurrUser(username);
-        // setCurrChannelId(currentChannelId);
-        dispatch(currChannelActions.setCurrChannel(defaultChannel));
+        setCurrUser(auth.getUsername());
+        dispatch(currChannelActions.setCurrChannel(currChannel));
       } catch (err) {
         // setDataFetchError(true);
         // console.log('err: ', err);
-        toast.warn('Возникла ошибка с загрузкой данных. Обновите старинцу.', {
+        toast.warn(t('dataFetchError'), {
           position: 'top-center',
           autoClose: 5000,
           hideProgressBar: false,
@@ -96,8 +85,6 @@ const Chat = ({ socket }) => {
   const [modalInfo, setModalInfo] = useState({ type: null, channel: null });
   const hideModal = () => setModalInfo({ type: null, channel: null });
   const showModal = (type, channel = null) => setModalInfo({ type, channel });
-
-  const { t } = useTranslation('translation', { keyPrefix: 'chat' });
 
   return (
     <div className="d-flex flex-column h-100">
@@ -148,14 +135,12 @@ const Chat = ({ socket }) => {
                   message={message}
                 />
               ))}
-              <NewChatMessage socket={socket} currChannelId={currChannel ? currChannel.id : ''} username={currUser} />
+              <NewChatMessage currChannelId={currChannel ? currChannel.id : ''} username={currUser} />
             </div>
           </Col>
         </Row>
       </Container>
-      {renderModal({
-        modalInfo, hideModal, socket,
-      })}
+      {renderModal({ modalInfo, hideModal })}
       {/* {dataFetchError
         ? <DataFetchErrorModal setDataFetchError={setDataFetchError} />
         : null} */}

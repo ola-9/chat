@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import SignupImage from '../../assets/signup.png';
 import routes from '../routes.js';
-import useAuth from '../hooks/index.jsx';
+import useAuth from '../hooks/useAuth.jsx';
 
 const Signup = () => {
   const [signUpFailed, setSignUpFailed] = useState(false);

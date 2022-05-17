@@ -2,9 +2,11 @@ import React, { useEffect, useRef } from 'react';
 import { useFormik } from 'formik';
 import { Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import useSocket from '../hooks/useSocket.jsx';
 
-const NewChatMesage = ({ socket, currChannelId, username }) => {
+const NewChatMesage = ({ currChannelId, username }) => {
   const inputRef = useRef();
+  const { createNewChatMessage } = useSocket();
 
   useEffect(() => {
     inputRef.current.select();
@@ -15,16 +17,12 @@ const NewChatMesage = ({ socket, currChannelId, username }) => {
       text: '',
     },
     onSubmit: (values) => {
-      console.log('values!!!', values);
       formik.resetForm();
-      const newMessage = {
+      createNewChatMessage({
         text: values.text,
         channelId: currChannelId,
         author: username,
         data: new Date(),
-      };
-      socket.emit('newMessage', newMessage, (data) => {
-        console.log(data);
       });
     },
   });

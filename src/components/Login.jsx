@@ -8,7 +8,7 @@ import axios from 'axios';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 // import { useRollbar } from '@rollbar/react';
-import useAuth from '../hooks/index.jsx';
+import useAuth from '../hooks/useAuth.jsx';
 import routes from '../routes.js';
 import loginImage from '../../assets/login.png';
 

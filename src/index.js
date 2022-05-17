@@ -5,10 +5,8 @@ import init from './init.jsx';
 
 const runApp = () => {
   const socket = io();
-  const test = init(socket);
-  ReactDOM.createRoot(document.getElementById('chat')).render(test);
-
-  // return test;
+  const app = init(socket);
+  ReactDOM.createRoot(document.getElementById('chat')).render(app);
 };
 
 runApp();

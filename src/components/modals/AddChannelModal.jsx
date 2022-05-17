@@ -7,10 +7,13 @@ import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
+import useSocket from '../../hooks/useSocket.jsx';
+import toastParams from '../../toastParams.js';
 
 const AddChannelModal = (props) => {
   const {
-    onHide, socket,
+    // onHide, socket,
+    onHide,
   } = props;
 
   const channels = useSelector((state) => Object.values(state.channelsReducer.entities));
@@ -23,7 +26,7 @@ const AddChannelModal = (props) => {
 
   const { t } = useTranslation('translation', { keyPrefix: 'chat.modals.add' });
 
-  // const dispatch = useDispatch();
+  const { addNewChannel } = useSocket();
 
   const schema = yup.object({
     name: yup
@@ -39,31 +42,18 @@ const AddChannelModal = (props) => {
       name: '',
     },
 
-    onSubmit: (values) => {
-      const validate = async (input) => {
-        try {
-          await schema.validate(input);
-          socket.emit('newChannel', values, (data) => {
-            console.log('data: ', data); // confirm if Ok
-          });
-          formik.resetForm();
-          onHide();
-          toast.success('Канал создан', {
-            position: 'top-right',
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-        } catch (err) {
-          const [message] = err.errors;
-          setInputValid(false);
-          setValidationError(message);
-        }
-      };
-      validate(values);
+    onSubmit: async (values) => {
+      try {
+        await schema.validate(values);
+        addNewChannel(values);
+        formik.resetForm();
+        onHide();
+        toast.success(t('toast'), toastParams);
+      } catch (err) {
+        const [message] = err.errors;
+        setInputValid(false);
+        setValidationError(message);
+      }
     },
   });
 

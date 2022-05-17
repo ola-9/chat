@@ -2,28 +2,22 @@ import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import toastParams from '../../toastParams.js';
+import useSocket from '../../hooks/useSocket.jsx';
 
 const RemoveChannelModal = (props) => {
-  const { onHide, modalInfo, socket } = props;
+  const { onHide, modalInfo } = props;
   const { channel } = modalInfo;
-
-  const handleRemove = () => {
-    socket.emit('removeChannel', { id: channel.id }, (data) => {
-      console.log(data);
-    });
-    onHide();
-    toast.success('Канал удалён', {
-      position: 'top-right',
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-  };
-
   const { t } = useTranslation('translation', { keyPrefix: 'chat.modals.remove' });
+  const { removeChannel } = useSocket();
+  const handleRemove = () => {
+    // socket.emit('removeChannel', { id: channel.id }, (data) => {
+    //   console.log(data);
+    // });
+    removeChannel(channel);
+    onHide();
+    toast.success(t('toast'), toastParams);
+  };
 
   return (
     <Modal

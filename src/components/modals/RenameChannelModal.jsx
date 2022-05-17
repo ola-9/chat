@@ -7,10 +7,13 @@ import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
+import toastParams from '../../toastParams.js';
+import useSocket from '../../hooks/useSocket.jsx';
 
 const RenameChannelModal = (props) => {
-  const { onHide, modalInfo, socket } = props;
+  const { onHide, modalInfo } = props;
   const { channel } = modalInfo;
+  const { renameChannel } = useSocket();
 
   const inputRef = useRef();
   useEffect(() => {
@@ -37,30 +40,17 @@ const RenameChannelModal = (props) => {
     initialValues: {
       name: channel.name,
     },
-    onSubmit: (values) => {
-      const validate = async (input) => {
-        try {
-          await schema.validate(input);
-          socket.emit('renameChannel', { id: channel.id, name: values.name }, (data) => {
-            console.log(data);
-          });
-          onHide();
-          toast.success('Канал переименован', {
-            position: 'top-right',
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-        } catch (err) {
-          const [message] = err.errors;
-          setInputValid(false);
-          setValidationError(message);
-        }
-      };
-      validate(values);
+    onSubmit: async (values) => {
+      try {
+        await schema.validate(values);
+        renameChannel(channel, values);
+        onHide();
+        toast.success(t('toast'), toastParams);
+      } catch (err) {
+        const [message] = err.errors;
+        setInputValid(false);
+        setValidationError(message);
+      }
     },
   });
 

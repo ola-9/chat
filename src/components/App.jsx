@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   BrowserRouter as Router,
   Routes,
@@ -12,28 +12,12 @@ import { useTranslation } from 'react-i18next';
 import { ToastContainer } from 'react-toastify';
 import Login from './Login.jsx';
 import NotFound from './NotFound.jsx';
-import AuthContext from '../contexts/index.jsx';
+import AuthProvider from '../contexts/AuthProvider.jsx';
 import Chat from './Chat.jsx';
 import LogOutBtn from './LogOutBtn.jsx';
-import useAuth from '../hooks/index.jsx';
+import useAuth from '../hooks/useAuth.jsx';
 import Signup from './Signup.jsx';
-
-const AuthProvider = ({ children }) => {
-  const userId = JSON.parse(localStorage.getItem('userId'));
-  const initialState = (userId && userId.token);
-  const [loggedIn, setLoggedIn] = useState(initialState);
-  const logIn = () => setLoggedIn(true);
-  const logOut = () => {
-    localStorage.removeItem('userId');
-    setLoggedIn(false);
-  };
-
-  return (
-    <AuthContext.Provider value={{ loggedIn, logIn, logOut }}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
+import SocketProvider from '../contexts/SocketProvider.jsx';
 
 const PrivateRoute = ({ children }) => {
   const auth = useAuth();
@@ -48,29 +32,32 @@ const App = ({ socket }) => {
 
   return (
     <AuthProvider>
-      <Router>
-        <Navbar variant="light" bg="white" expand="lg" className="shadow-sm">
-          <Container>
-            <Navbar.Brand>
-              <NavLink className="navbar-brand" to="/">{t('header.brand')}</NavLink>
-            </Navbar.Brand>
-            <LogOutBtn />
-          </Container>
-        </Navbar>
-        <Routes>
-          <Route
-            path="/"
-            element={(
-              <PrivateRoute>
-                <Chat socket={socket} />
-              </PrivateRoute>
-            )}
-          />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Router>
+      <SocketProvider socket={socket}>
+        <Router>
+          <Navbar variant="light" bg="white" expand="lg" className="shadow-sm">
+            <Container>
+              <Navbar.Brand>
+                <NavLink className="navbar-brand" to="/">{t('header.brand')}</NavLink>
+              </Navbar.Brand>
+              <LogOutBtn />
+            </Container>
+          </Navbar>
+          <Routes>
+            <Route
+              path="/"
+              element={(
+                <PrivateRoute>
+                  {/* <Chat socket={socket} /> */}
+                  <Chat />
+                </PrivateRoute>
+              )}
+            />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Router>
+      </SocketProvider>
       <ToastContainer
         position="top-right"
         autoClose={5000}

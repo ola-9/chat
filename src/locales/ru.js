@@ -32,6 +32,7 @@ export default {
             required: 'Обязательное поле',
             minMax: 'От 3 до 20 символов',
           },
+          toast: 'Канал создан',
         },
         rename: {
           title: 'Переименовать канал',
@@ -43,14 +44,17 @@ export default {
             required: 'Обязательное поле',
             minMax: 'От 3 до 20 символов',
           },
+          toast: 'Канал переименован',
         },
         remove: {
           title: 'Удалить канал',
           body: 'Уверены?',
           cancelBtn: 'Отменить',
           removeBtn: 'Удалить',
+          toast: 'Канал удалён',
         },
       },
+      dataFetchError: 'Возникла ошибка с загрузкой данных. Обновите старинцу.',
     },
     login: {
       card: {

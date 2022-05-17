@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import useAuth from '../hooks/index.jsx';
+import useAuth from '../hooks/useAuth.jsx';
 
 const LogOutBtn = () => {
   const auth = useAuth();
