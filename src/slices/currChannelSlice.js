@@ -22,8 +22,11 @@ const currChannelSlice = createSlice({
         currChannelAdapter.setOne(state, channel);
       })
       .addCase(channelsActions.removeChannel, (state, action) => {
-        // если текущий канал == тому который удаляют
-        console.log('action inside extra currChannelScise', action.payload);
+        const [currChannelId] = state.ids;
+        if (currChannelId === action.payload) {
+          currChannelAdapter.removeAll(state);
+          currChannelAdapter.setOne(state, { id: 1, name: 'general', removable: false });
+        }
       });
   },
 });
