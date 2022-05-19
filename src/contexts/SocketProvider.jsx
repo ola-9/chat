@@ -2,7 +2,7 @@ import React, { createContext } from 'react';
 import { useDispatch } from 'react-redux';
 import { actions as channelsActions } from '../slices/channelsSlice.js';
 import { actions as messagesActions } from '../slices/messagesSlice.js';
-// import { actions as currChannelActions } from '../slices/currChannelSlice.js';
+import { actions as currChannelActions } from '../slices/uiSlice.js';
 
 export const SocketContext = createContext({});
 
@@ -10,7 +10,9 @@ const SocketProvider = ({ children, socket }) => {
   const dispatch = useDispatch();
 
   const addNewChannel = (channel) => socket.emit('newChannel', channel, (data) => {
-    console.log('data: ', data);
+    if (data.status === 'ok') {
+      dispatch(currChannelActions.setCurrChannelId(data.data.id));
+    }
   });
 
   socket.on('newChannel', (newChannel) => {
@@ -49,14 +51,6 @@ const SocketProvider = ({ children, socket }) => {
   );
 
   socket.on('removeChannel', (removedChannel) => {
-    // const [currChannel] = useSelector((state) => Object
-    //  .values(state.currChannelReducer.entities));
-    // if (removedChannel.id === currChannel.id) {
-    //   dispatch(currChannelActions.updateCurrChannel({
-    //     id: currChannel.id,
-    //     changes: { id: 1, name: 'general', removable: false },
-    //   }));
-    // }
     dispatch(channelsActions.removeChannel(removedChannel.id));
   });
 

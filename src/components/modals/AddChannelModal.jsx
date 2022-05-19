@@ -10,12 +10,7 @@ import * as yup from 'yup';
 import useSocket from '../../hooks/useSocket.jsx';
 import toastParams from '../../toastParams.js';
 
-const AddChannelModal = (props) => {
-  const {
-    // onHide, socket,
-    onHide,
-  } = props;
-
+const AddChannelModal = ({ onHide }) => {
   const channels = useSelector((state) => Object.values(state.channelsReducer.entities));
   const channelsNames = channels.map((channel) => channel.name);
 

@@ -47,7 +47,6 @@ const App = ({ socket }) => {
               path="/"
               element={(
                 <PrivateRoute>
-                  {/* <Chat socket={socket} /> */}
                   <Chat />
                 </PrivateRoute>
               )}

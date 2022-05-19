@@ -31,7 +31,7 @@ const init = (socket) => {
   filter.add(filter.getDictionary('ru'));
 
   const rollbarConfig = {
-    accessToken: 'cbc76f9cbb72450bbc155fc59816ed3c',
+    accessToken: `${process.env.REACT_APP_ROLLBAR_ACCESS_TOKEN}`,
     captureUncaught: true,
     captureUnhandledRejections: true,
     payload: {

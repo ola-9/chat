@@ -10,8 +10,7 @@ import * as yup from 'yup';
 import toastParams from '../../toastParams.js';
 import useSocket from '../../hooks/useSocket.jsx';
 
-const RenameChannelModal = (props) => {
-  const { onHide, modalInfo } = props;
+const RenameChannelModal = ({ onHide, modalInfo }) => {
   const { channel } = modalInfo;
   const { renameChannel } = useSocket();
 

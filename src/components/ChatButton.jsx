@@ -7,8 +7,8 @@ const ChatButton = ({
   channel, showModal, handleClick,
 }) => {
   const { id, name, removable } = channel;
-  const [currChannel] = useSelector((state) => Object.values(state.currChannelReducer.entities));
-  const variant = id === currChannel.id ? 'secondary' : '';
+  const { currentChannelId } = useSelector((state) => state.uiReducer);
+  const variant = id === currentChannelId ? 'secondary' : '';
 
   const { t } = useTranslation('translation', { keyPrefix: 'chat.channels' });
 

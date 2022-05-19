@@ -5,15 +5,11 @@ import { toast } from 'react-toastify';
 import toastParams from '../../toastParams.js';
 import useSocket from '../../hooks/useSocket.jsx';
 
-const RemoveChannelModal = (props) => {
-  const { onHide, modalInfo } = props;
+const RemoveChannelModal = ({ onHide, modalInfo }) => {
   const { channel } = modalInfo;
   const { t } = useTranslation('translation', { keyPrefix: 'chat.modals.remove' });
   const { removeChannel } = useSocket();
   const handleRemove = () => {
-    // socket.emit('removeChannel', { id: channel.id }, (data) => {
-    //   console.log(data);
-    // });
     removeChannel(channel);
     onHide();
     toast.success(t('toast'), toastParams);
