@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
 import toastParams from '../../toastParams.js';
-import useChatApi from '../../hooks/useChat.jsx';
+import useChatApi from '../../hooks/useChatApi.jsx';
 
 const RenameChannelModal = ({ onHide, modalInfo }) => {
   const { channel } = modalInfo;

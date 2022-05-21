@@ -3,7 +3,7 @@ import { Modal, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import toastParams from '../../toastParams.js';
-import useChatApi from '../../hooks/useChat.jsx';
+import useChatApi from '../../hooks/useChatApi.jsx';
 
 const RemoveChannelModal = ({ onHide, modalInfo }) => {
   const { channel } = modalInfo;

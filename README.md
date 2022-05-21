@@ -1,6 +1,6 @@
 # Chat App
 
-[![Actions Status](https://github.com/ola-9/frontend-project-lvl4/workflows/hexlet-check/badge.svg)](https://github.com/ola-9/frontend-project-lvl4/actions)
+[![Actions Status](https://github.com/ola-9/frontend-project-lvl4/workflows/hexlet-check/badge.svg)](https://github.com/ola-9/frontend-project-lvl4/actions) [![Node CI](https://github.com/ola-9/frontend-project-lvl2/actions/workflows/my-check.yml/badge.svg)](https://github.com/ola-9/frontend-project-lvl2/actions/workflows/my-check.yml)
 
 🎉 The real-time chat application that enable users to communicate with other users through text messages over internet.
 

@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { useFormik } from 'formik';
 import { Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import useChatApi from '../hooks/useChat.jsx';
+import useChatApi from '../hooks/useChatApi.jsx';
 
 const NewChatMesage = ({ currChannelId, username }) => {
   const inputRef = useRef();

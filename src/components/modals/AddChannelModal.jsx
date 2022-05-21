@@ -7,7 +7,7 @@ import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
-import useChatApi from '../../hooks/useChat.jsx';
+import useChatApi from '../../hooks/useChatApi.jsx';
 import toastParams from '../../toastParams.js';
 
 const AddChannelModal = ({ onHide }) => {
