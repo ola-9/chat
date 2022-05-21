@@ -8,11 +8,11 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
 import toastParams from '../../toastParams.js';
-import useSocket from '../../hooks/useSocket.jsx';
+import useChatApi from '../../hooks/useChat.jsx';
 
 const RenameChannelModal = ({ onHide, modalInfo }) => {
   const { channel } = modalInfo;
-  const { renameChannel } = useSocket();
+  const { renameChannel } = useChatApi();
 
   const inputRef = useRef();
   useEffect(() => {

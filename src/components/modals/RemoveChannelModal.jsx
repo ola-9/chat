@@ -3,12 +3,12 @@ import { Modal, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import toastParams from '../../toastParams.js';
-import useSocket from '../../hooks/useSocket.jsx';
+import useChatApi from '../../hooks/useChat.jsx';
 
 const RemoveChannelModal = ({ onHide, modalInfo }) => {
   const { channel } = modalInfo;
   const { t } = useTranslation('translation', { keyPrefix: 'chat.modals.remove' });
-  const { removeChannel } = useSocket();
+  const { removeChannel } = useChatApi();
   const handleRemove = () => {
     removeChannel(channel);
     onHide();

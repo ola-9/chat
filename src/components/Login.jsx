@@ -56,12 +56,6 @@ const Login = (props) => {
               </div>
               <Formik
                 initialValues={{ username: '', password: '' }}
-                // validationSchema={
-                //   yup.object({
-                //     username: yup.string().required(t('card.form.errors.validation')),
-                //     password: yup.string().required(t('card.form.errors.validation')),
-                //   })
-                // }
                 onSubmit={onSubmit}
               >
                 {({ errors, touched, handleSubmit }) => (
@@ -82,9 +76,6 @@ const Login = (props) => {
                         autoFocus
                       />
                       <label htmlFor="username">{t('card.form.username.label')}</label>
-                      {/* <ErrorMessage name="username">
-                        {(msg) => <div className="text-danger fw-lighter fs-6">{msg}</div>}
-                      </ErrorMessage> */}
                     </div>
                     <div className="form-floating mb-4 position-relative">
                       <Field
@@ -97,9 +88,6 @@ const Login = (props) => {
                         placeholder={t('card.form.password.placeholder')}
                       />
                       <label htmlFor="password">{t('card.form.password.label')}</label>
-                      {/* <ErrorMessage name="password">
-                        {(msg) => <div className="text-danger fw-lighter fs-6">{msg}</div>}
-                      </ErrorMessage> */}
                       {authFailed && (
                         <Form.Control.Feedback type="invalid" tooltip>
                           {t('card.form.errors.auth')}

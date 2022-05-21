@@ -7,7 +7,7 @@ import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
-import useSocket from '../../hooks/useSocket.jsx';
+import useChatApi from '../../hooks/useChat.jsx';
 import toastParams from '../../toastParams.js';
 
 const AddChannelModal = ({ onHide }) => {
@@ -21,7 +21,7 @@ const AddChannelModal = ({ onHide }) => {
 
   const { t } = useTranslation('translation', { keyPrefix: 'chat.modals.add' });
 
-  const { addNewChannel } = useSocket();
+  const { addNewChannel } = useChatApi();
 
   const schema = yup.object({
     name: yup

@@ -4,9 +4,9 @@ import { actions as channelsActions } from '../slices/channelsSlice.js';
 import { actions as messagesActions } from '../slices/messagesSlice.js';
 import { actions as currChannelActions } from '../slices/uiSlice.js';
 
-export const SocketContext = createContext({});
+export const ChatContext = createContext({});
 
-const SocketProvider = ({ children, socket }) => {
+const ChatApiProvider = ({ children, socket }) => {
   const dispatch = useDispatch();
 
   const addNewChannel = (channel) => socket.emit('newChannel', channel, (data) => {
@@ -55,13 +55,13 @@ const SocketProvider = ({ children, socket }) => {
   });
 
   return (
-    <SocketContext.Provider value={{
+    <ChatContext.Provider value={{
       addNewChannel, createNewChatMessage, renameChannel, removeChannel,
     }}
     >
       {children}
-    </SocketContext.Provider>
+    </ChatContext.Provider>
   );
 };
 
-export default SocketProvider;
+export default ChatApiProvider;

@@ -8,6 +8,7 @@ import filter from 'leo-profanity';
 import resources from './locales/index.js';
 import store from './slices/index.js';
 import App from './components/App.jsx';
+import ChatApiProvider from './contexts/ChatApiProvider.jsx';
 
 const init = (socket) => {
   const defaultLanguage = 'ru';
@@ -25,7 +26,6 @@ const init = (socket) => {
       },
     });
 
-  // Настройка фильтрации
   filter.clearList();
   filter.add(filter.getDictionary('en'));
   filter.add(filter.getDictionary('ru'));
@@ -47,7 +47,9 @@ const init = (socket) => {
         <I18nextProvider i18n={i18n}>
           <RProvider config={rollbarConfig} instance={rollbar}>
             <ErrorBoundary>
-              <App socket={socket} />
+              <ChatApiProvider socket={socket}>
+                <App />
+              </ChatApiProvider>
             </ErrorBoundary>
           </RProvider>
         </I18nextProvider>

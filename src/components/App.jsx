@@ -17,7 +17,6 @@ import Chat from './Chat.jsx';
 import LogOutBtn from './LogOutBtn.jsx';
 import useAuth from '../hooks/useAuth.jsx';
 import Signup from './Signup.jsx';
-import SocketProvider from '../contexts/SocketProvider.jsx';
 
 const PrivateRoute = ({ children }) => {
   const auth = useAuth();
@@ -27,36 +26,34 @@ const PrivateRoute = ({ children }) => {
   );
 };
 
-const App = ({ socket }) => {
+const App = () => {
   const { t } = useTranslation();
 
   return (
     <AuthProvider>
-      <SocketProvider socket={socket}>
-        <Router>
-          <Navbar variant="light" bg="white" expand="lg" className="shadow-sm">
-            <Container>
-              <Navbar.Brand>
-                <NavLink className="navbar-brand" to="/">{t('header.brand')}</NavLink>
-              </Navbar.Brand>
-              <LogOutBtn />
-            </Container>
-          </Navbar>
-          <Routes>
-            <Route
-              path="/"
-              element={(
-                <PrivateRoute>
-                  <Chat />
-                </PrivateRoute>
-              )}
-            />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Router>
-      </SocketProvider>
+      <Router>
+        <Navbar variant="light" bg="white" expand="lg" className="shadow-sm">
+          <Container>
+            <Navbar.Brand>
+              <NavLink className="navbar-brand" to="/">{t('header.brand')}</NavLink>
+            </Navbar.Brand>
+            <LogOutBtn />
+          </Container>
+        </Navbar>
+        <Routes>
+          <Route
+            path="/"
+            element={(
+              <PrivateRoute>
+                <Chat />
+              </PrivateRoute>
+            )}
+          />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Router>
       <ToastContainer
         position="top-right"
         autoClose={5000}

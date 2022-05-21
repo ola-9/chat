@@ -14,23 +14,15 @@ import ChatMessage from './ChatMessage.jsx';
 import getModal from './modals/index.jsx';
 import useAuth from '../hooks/useAuth.jsx';
 import toastParams from '../toastParams.js';
-// import DataFetchErrorModal from './DataFetchErrorModal.jsx';
 
-const renderModal = ({
-  modalInfo, hideModal, socket,
-}) => {
+const renderModal = ({ modalInfo, hideModal }) => {
   if (!modalInfo.type) {
     return null;
   }
-
   const Component = getModal(modalInfo.type);
 
   return (
-    <Component
-      modalInfo={modalInfo}
-      socket={socket}
-      onHide={hideModal}
-    />
+    <Component modalInfo={modalInfo} onHide={hideModal} />
   );
 };
 
@@ -38,9 +30,7 @@ const Chat = () => {
   const auth = useAuth();
   const dispatch = useDispatch();
 
-  const [currUser, setCurrUser] = useState('');
   const { t } = useTranslation('translation', { keyPrefix: 'chat' });
-  // const [dataFetchError, setDataFetchError] = useState(false);
 
   useEffect(() => {
     const fetchContent = async () => {
@@ -50,10 +40,7 @@ const Chat = () => {
         dispatch(channelsActions.addChannels(channels));
         dispatch(messagesActions.addMessages(messages));
         dispatch(uiActions.setCurrChannelId(currentChannelId));
-        setCurrUser(auth.getUsername());
       } catch (err) {
-        // setDataFetchError(true);
-        // console.log('err: ', err);
         toast.warn(t('dataFetchError'), toastParams);
       }
     };
@@ -132,14 +119,11 @@ const Chat = () => {
               ))}
               <div ref={messagesEndRef} />
             </div>
-            <NewChatMessage currChannelId={currChannel ? currChannel.id : ''} username={currUser} />
+            <NewChatMessage currChannelId={currChannel ? currChannel.id : ''} username={auth.getUsername()} />
           </div>
         </Col>
       </Row>
       {renderModal({ modalInfo, hideModal })}
-      {/* {dataFetchError
-        ? <DataFetchErrorModal setDataFetchError={setDataFetchError} />
-        : null} */}
     </Container>
   );
 };
