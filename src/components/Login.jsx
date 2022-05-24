@@ -105,7 +105,7 @@ const Login = (props) => {
                   {t('card.footer.question')}
                   &nbsp;
                 </span>
-                <Link to="/signup">
+                <Link to={routes.signupPage()}>
                   {t('card.footer.signup')}
                 </Link>
               </div>

@@ -25,7 +25,7 @@ $ make install
 
 ## Overview
 
-This app is my learning project from the [Hexlet Frontend Developer course](https://ru.hexlet.io) aimed to get hands-on experience with the following topics:
+This app is my learning project from the [Hexlet Frontend Developer course](https://hexlet.io) aimed to get hands-on experience with the following topics:
 
 - React/React Hooks + Redux (@reduxjs/toolkit);
 - Build forms with [formik](https://formik.org/)
@@ -33,6 +33,7 @@ This app is my learning project from the [Hexlet Frontend Developer course](http
 - [React Bootstrap](https://react-bootstrap.github.io/) UI Components
 - Bad words filter by [leo-profanity](https://github.com/jojoee/leo-profanity)
 - Notifications by [React-Toastify](https://www.npmjs.com/package/react-toastify)
+- Interface internationalization and text management by [react-i18next](https://react.i18next.com/)
 - Cloud-based bug tracking and monitoring by [Rollbar](https://rollbar.com)
 - Deploy to [Heroku](https://www.heroku.com)
-- ESlint, webpack
+- ESlint, Webpack

@@ -17,6 +17,7 @@ import Chat from './Chat.jsx';
 import LogOutBtn from './LogOutBtn.jsx';
 import useAuth from '../hooks/useAuth.jsx';
 import Signup from './Signup.jsx';
+import routes from '../routes.js';
 
 const PrivateRoute = ({ children }) => {
   const auth = useAuth();
@@ -35,23 +36,23 @@ const App = () => {
         <Navbar variant="light" bg="white" expand="lg" className="shadow-sm">
           <Container>
             <Navbar.Brand>
-              <NavLink className="navbar-brand" to="/">{t('header.brand')}</NavLink>
+              <NavLink className="navbar-brand" to={routes.mainPage()}>{t('header.brand')}</NavLink>
             </Navbar.Brand>
             <LogOutBtn />
           </Container>
         </Navbar>
         <Routes>
           <Route
-            path="/"
+            path={routes.mainPage()}
             element={(
               <PrivateRoute>
                 <Chat />
               </PrivateRoute>
             )}
           />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="*" element={<NotFound />} />
+          <Route path={routes.loginPage()} element={<Login />} />
+          <Route path={routes.signupPage()} element={<Signup />} />
+          <Route path={routes.notFoundPage()} element={<NotFound />} />
         </Routes>
       </Router>
       <ToastContainer
